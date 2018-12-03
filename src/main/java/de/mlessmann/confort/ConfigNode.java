@@ -43,4 +43,25 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     public Map<String, IConfigNode> asMap() {
         return Collections.unmodifiableMap(map);
     }
+
+    @Override
+    public synchronized void setValue(Object value) {
+        throw new UnsupportedOperationException("#setValue is not supported by ConfigNode.");
+    }
+
+    public boolean collapse() {
+        if (isPrimitive()) {
+            return getValue() == null;
+
+        } else if (isList()) {
+            list.removeIf(ConfigNode::collapse);
+            return list.isEmpty();
+
+        } else if (isMap()) {
+            map.entrySet().removeIf(entry -> entry.getValue().collapse());
+            return map.isEmpty();
+        }
+
+        return true;
+    }
 }

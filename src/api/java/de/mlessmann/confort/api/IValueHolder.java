@@ -17,30 +17,31 @@ public interface IValueHolder {
 
     Optional<Boolean> optBoolean();
 
+    void setBoolean(Boolean value);
+
     String asString();
 
     Optional<String> optString();
+
+    void setString(String value);
 
     Integer asInteger();
 
     Optional<Integer> optInteger();
 
+    void setInteger(Integer value);
+
     Float asFloat();
 
     Optional<Float> optFloat();
+
+    void setFloat(Float value);
 
     Double asDouble();
 
     Optional<Double> optDouble();
 
-    /**
-     * Sets the currently stored value to an other one.
-     * @param value The new value to be stored.
-     *
-     * @throws de.mlessmann.confort.api.except.TypeMismatchException
-     *         When the given type is not applicable to one of the supported types.
-     */
-    void setValue(Object value);
+    void setDouble(Double value);
 
     Object getValue();
 

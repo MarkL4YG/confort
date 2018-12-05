@@ -23,6 +23,11 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
+    public void setBoolean(Boolean value) {
+        setValue(value);
+    }
+
+    @Override
     public String asString() {
         return getValue(String.class);
     }
@@ -30,6 +35,11 @@ public class ValueHolder implements IValueHolder {
     @Override
     public Optional<String> optString() {
         return optValue(String.class);
+    }
+
+    @Override
+    public void setString(String value) {
+        setValue(value);
     }
 
     @Override
@@ -43,6 +53,11 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
+    public void setInteger(Integer value) {
+        setValue(value);
+    }
+
+    @Override
     public Float asFloat() {
         return getValue(Float.class);
     }
@@ -50,6 +65,11 @@ public class ValueHolder implements IValueHolder {
     @Override
     public Optional<Float> optFloat() {
         return optValue(Float.class);
+    }
+
+    @Override
+    public void setFloat(Float value) {
+        setValue(value);
     }
 
     @Override
@@ -63,7 +83,11 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
-    public synchronized void setValue(Object value) {
+    public void setDouble(Double value) {
+        setValue(value);
+    }
+
+    protected synchronized void setValue(Object value) {
         this.value = value;
     }
 

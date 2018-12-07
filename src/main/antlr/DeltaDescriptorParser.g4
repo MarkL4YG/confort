@@ -31,18 +31,18 @@ navigateTo
   : OP_NAVIGATE QUOTED_STRING? ;
 
 descriptor
-  : node_location reversableOP reversableArg?;
+  : operationArgument reversableOP operationArgument?;
 
 node_location
   : META_RELATIVE? QUOTED_STRING
   ;
 
-reversableArg
-  : generator
+operationArgument
+  : method_identifier
   | node_location
   ;
 
-generator
+method_identifier
   : IDENTIFIER
   ;
 

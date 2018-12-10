@@ -15,7 +15,7 @@ public class DescriptorScope {
         scope.put(key, value);
     }
 
-    public void get(String key) {
-        scope.getOrDefault(key, null);
+    public String get(String key) {
+        return scope.getOrDefault(key, null);
     }
 }

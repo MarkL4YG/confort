@@ -16,7 +16,16 @@ public class AssignmentNode implements DeltaDescriptorNode {
     }
 
     @Override
+    public void readAhead(DescriptorScope scope) {
+        set(scope);
+    }
+
+    @Override
     public void executeOn(IConfigNode root, IConfigNode relativeRoot, DescriptorScope scope) {
+        set(scope);
+    }
+
+    private void set(DescriptorScope scope) {
         if (!scope.has(key) || !isWeak) {
             scope.set(key, value);
         }

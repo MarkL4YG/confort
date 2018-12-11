@@ -10,7 +10,7 @@ import java.util.Map;
  * * List of configuration nodes
  * * An {@link IValueHolder}
  */
-public interface IConfigNode extends IValueHolder {
+public interface IConfigNode extends IConfigNodePrimitive, IConfigNodeList, IConfigNodeMap {
 
     boolean isMap();
 
@@ -19,10 +19,4 @@ public interface IConfigNode extends IValueHolder {
     boolean isPrimitive();
 
     boolean isVirtual();
-
-    IConfigNode getNode(String... path);
-
-    List<IConfigNode> asList();
-
-    Map<String, IConfigNode> asMap();
 }

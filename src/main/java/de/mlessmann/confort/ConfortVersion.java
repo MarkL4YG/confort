@@ -70,7 +70,7 @@ public class ConfortVersion implements Comparable<ConfortVersion> {
     @Override
     public String toString() {
         return parts.stream()
-                .map(Integer::toString)
+                .map(Object::toString)
                 .collect(Collectors.joining("."));
     }
 }

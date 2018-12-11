@@ -2,6 +2,7 @@ package de.mlessmann.confort.migration;
 
 import de.mlessmann.confort.antlr.DeltaDescriptorParserBaseVisitor;
 import de.mlessmann.confort.migration.nodes.*;
+import de.mlessmann.confort.migration.nodes.operations.OpCode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -75,7 +76,7 @@ public class DeltaVisitor extends DeltaDescriptorParserBaseVisitor<DeltaDescript
     public DeltaDescriptorNode visitDescriptor(DescriptorContext ctx) {
         OpArgument leftLocation = visitOperationArg(ctx.operationArgument(0));
         OpArgument rightLocation = null;
-        OperationNode.OpCode code = visitOperation(ctx.reversableOP());
+        OpCode code = visitOperation(ctx.reversableOP());
 
         if (ctx.operationArgument().size() > 1) {
             rightLocation = visitOperationArg(ctx.operationArgument(1));
@@ -115,17 +116,17 @@ public class DeltaVisitor extends DeltaDescriptorParserBaseVisitor<DeltaDescript
         );
     }
 
-    private OperationNode.OpCode visitOperation(ReversableOPContext ctx) {
+    private OpCode visitOperation(ReversableOPContext ctx) {
         if (ctx.OP_DROP() != null) {
-            return OperationNode.OpCode.DROP;
+            return OpCode.DROP;
         } else if (ctx.OP_GENERATE() != null) {
-            return OperationNode.OpCode.GENERATE;
+            return OpCode.GENERATE;
         } else if (ctx.OP_MERGE_APPEND() != null) {
-            return OperationNode.OpCode.MERGE_APPEND;
+            return OpCode.MERGE_APPEND;
         } else if (ctx.OP_MERGE_PREPEND() != null) {
-            return OperationNode.OpCode.MERGE_PREPEND;
+            return OpCode.MERGE_PREPEND;
         } else if (ctx.OP_MOVE() != null) {
-            return OperationNode.OpCode.MOVE;
+            return OpCode.MOVE;
         } else {
             throwUnmatched(ctx);
         }

@@ -9,6 +9,11 @@ version '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+/// === Configuration === ///
+project.ext {
+    antlrVersion = '4.7.1'
+}
+
 /// ===== Repositories / SourceSets / Dependencies ===== ///
 
 repositories {
@@ -19,6 +24,22 @@ repositories {
 }
 
 sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'build/generated-src/antlr/main']
+        }
+        antlr {
+            srcDirs = ['src/main/antlr']
+        }
+    }
+    lang {
+        java {
+            srcDirs = ['src/lang/java', 'build/generated-src/antlr/lang']
+        }
+        antlr {
+            srcDirs = ['src/lang/antlr']
+        }
+    }
     api {
         java {
             srcDirs = ['src/api/java']
@@ -27,9 +48,10 @@ sourceSets {
 }
 
 dependencies {
-    antlr group: 'org.antlr', name: 'antlr4', version: '4.7.1'
-    
+    antlr group: 'org.antlr', name: 'antlr4', version: project.ext.antlrVersion
+
     compile sourceSets.api.output
+    compile sourceSets.lang.output
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -37,35 +59,7 @@ dependencies {
 
 /// ===== Tasks ===== ///
 
-/// ===== ANTLR 4 ===== ///
-
-// BEGIN Fix for Gradle bug #2565
-// "cannot find tokens"-bug with packaged grammar
-// Found via. https://github.com/gradle/gradle/issues/2565#issuecomment-417916273
-// From: https://github.com/apache/groovy/blob/master/subprojects/parser-antlr4/build.gradle#L34
-final PARSER_PACKAGE_NAME = 'de.mlessmann.confort.antlr'
-generateGrammarSource {
-    outputs.cacheIf { true }
-    arguments += ["-visitor", "-no-listener", "-package", PARSER_PACKAGE_NAME]
-
-    doLast {
-        def parserFilePattern = 'DeltaDescriptor*'
-        def outputPath = generateGrammarSource.outputDirectory.canonicalPath
-        def parserPackagePath = "${outputPath}/${PARSER_PACKAGE_NAME.replace('.', '/')}"
-        file(parserPackagePath).mkdirs()
-        copy {
-            from outputPath
-            into parserPackagePath
-            include parserFilePattern
-        }
-        delete fileTree(outputPath) {
-            include parserFilePattern
-        }
-    }
-}
-// END Fix #2565
-
-/// ===== Generic gradle settings ===== ///
+apply from: './buildLang.gradle'
 
 wrapper {
     gradleVersion = '4.2.1'

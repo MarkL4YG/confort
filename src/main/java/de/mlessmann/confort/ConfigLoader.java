@@ -1,10 +1,7 @@
 package de.mlessmann.confort;
 
-import de.mlessmann.confort.antlr.DeltaDescriptorLexer;
-import de.mlessmann.confort.antlr.DeltaDescriptorParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,18 +25,18 @@ public abstract class ConfigLoader<L extends Lexer, P extends Parser> {
 
         // Use 2-stage parsing for expression performance
         // https://github.com/antlr/antlr4/blob/master/doc/faq/general.md#why-is-my-expression-parser-slow
-
-        new DeltaDescriptorParser(tokens).parse();
-
-        parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
         try {
-            parser.consume();  // STAGE 1
-        }
-        catch (Exception ex) {
+            //STAGE 1
+            logger.debug("Trying to run STAGE 1 parsing. (SSL prediction)");
+            parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+            parse(parser);
+        } catch (Exception ex) {
+            logger.debug("Trying to run STAGE 2 parsing. (LL prediction)", ex);
+            // STAGE 2
             tokens.seek(0); // rewind input stream
             parser.reset();
             parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-            parser.stat();  // STAGE 2
+            parse(parser);
             // if we parse ok, it's LL not SLL
         }
     }
@@ -48,7 +45,5 @@ public abstract class ConfigLoader<L extends Lexer, P extends Parser> {
 
     protected abstract P produceParser(CommonTokenStream tokenStream) throws IOException;
 
-    protected abstract ParserRuleContext proceStartCTX(P parser);
-
-    protected
+    protected abstract void parse(P parser);
 }

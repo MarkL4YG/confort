@@ -2,9 +2,14 @@ package de.mlessmann.confort.migration.nodes.operations;
 
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.migration.DescriptorScope;
+import de.mlessmann.confort.migration.nodes.OpArgument;
 import de.mlessmann.confort.migration.nodes.interaction.NodeGenerator;
 
 public class GenerateNode extends OpNode {
+
+    public GenerateNode(OpArgument leftHand, OpArgument rightHand) {
+        super(leftHand, rightHand);
+    }
 
     @Override
     public void executeOn(IConfigNode root, IConfigNode relativeRoot, DescriptorScope scope) {
@@ -21,7 +26,6 @@ public class GenerateNode extends OpNode {
                     String message = String.format("No generator found for: \"%s\"", getRightHand().getIdentifier());
                     return new IllegalArgumentException(message);
                 });
-
 
         IConfigNode target = (getLeftHand().isRelative() ? relativeRoot : root)
                 .getNode(getLeftHand().asPath());

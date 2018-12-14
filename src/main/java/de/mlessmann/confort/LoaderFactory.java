@@ -57,4 +57,8 @@ public class LoaderFactory {
     public static boolean hasAny() {
         return LOADERS.size() > 0;
     }
+
+    private LoaderFactory() {
+        // Hide public constructor
+    }
 }

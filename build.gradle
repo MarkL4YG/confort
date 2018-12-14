@@ -51,10 +51,16 @@ dependencies {
     antlr group: 'org.antlr', name: 'antlr4', version: project.ext.antlrVersion
 
     compile sourceSets.api.output
-    compile sourceSets.lang.output
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-
+    
+    langCompile sourceSets.api.output
+    langCompile sourceSets.main.output
+    langCompile group: 'org.antlr', name: 'antlr4', version: project.ext.antlrVersion
+    langCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    
+    testCompile sourceSets.lang.output
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.json', name: 'json', version: '20180813'
 }
 
 /// ===== Tasks ===== ///

@@ -1,0 +1,15 @@
+{
+  "nan": "__NaN__f",
+  "inf": "__Inf__f",
+  "Ninf": "__Inf-__f",
+
+  "nanD": "__NaN__d",
+  "infD": "__Inf__d",
+  "NinfD": "__Inf-__d",
+  "foo": {
+    "bar": ["bar"],
+    "num": 55,
+    "float": 5555,
+    "tee": "tee"
+  }
+}

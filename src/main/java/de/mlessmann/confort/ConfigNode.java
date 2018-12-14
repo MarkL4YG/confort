@@ -6,8 +6,8 @@ import java.util.*;
 
 public class ConfigNode extends ValueHolder implements IConfigNode {
 
-    private Map<String, ConfigNode> map = new TreeMap<>();
-    private List<ConfigNode> list = new LinkedList<>();
+    private Map<String, IConfigNode> map = new TreeMap<>();
+    private List<IConfigNode> list = new LinkedList<>();
 
     @Override
     public boolean isMap() {
@@ -31,7 +31,19 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     @Override
     public IConfigNode getNode(String... path) {
-        return null;
+        if (path.length <= 0) {
+            return this;
+
+        } else if (path.length == 1) {
+            return map.getOrDefault(path[0], new ConfigNode());
+
+        } else {
+            IConfigNode currentTarget = this;
+            for (String s : path) {
+                currentTarget = currentTarget.getNode(s);
+            }
+            return currentTarget;
+        }
     }
 
     @Override
@@ -40,23 +52,44 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     }
 
     @Override
+    public synchronized IConfigNode remove(Integer index) {
+        return list.remove(0);
+    }
+
+    @Override
+    public synchronized void prepend(IConfigNode child) {
+        list.add(0, child);
+    }
+
+    @Override
+    public synchronized void append(IConfigNode child) {
+        list.add(child);
+    }
+
+    @Override
     public Map<String, IConfigNode> asMap() {
         return Collections.unmodifiableMap(map);
     }
 
-    public boolean collapse() {
-        if (isPrimitive()) {
-            return getValue() == null;
+    @Override
+    public synchronized void put(String childName, IConfigNode child) {
+        map.put(childName, child);
+    }
 
-        } else if (isList()) {
-            list.removeIf(ConfigNode::collapse);
-            return list.isEmpty();
+    @Override
+    public synchronized IConfigNode remove(String childName) {
+        return map.remove(childName);
+    }
+
+    @Override
+    public boolean collapse() {
+        if (isList()) {
+            list.removeIf(IConfigNode::collapse);
 
         } else if (isMap()) {
             map.entrySet().removeIf(entry -> entry.getValue().collapse());
-            return map.isEmpty();
         }
 
-        return true;
+        return isVirtual();
     }
 }

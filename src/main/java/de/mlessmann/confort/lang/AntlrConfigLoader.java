@@ -1,22 +1,21 @@
-package de.mlessmann.confort;
+package de.mlessmann.confort.lang;
 
+import de.mlessmann.confort.api.IConfigNode;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.io.Reader;
 
-public abstract class ConfigLoader<L extends Lexer, P extends Parser> {
+public abstract class AntlrConfigLoader<L extends Lexer, P extends Parser> extends ConfigLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConfigLoader.class);
+    private static final Logger logger = LoggerFactory.getLogger(AntlrConfigLoader.class);
 
-    private static final Charset CHARSET = Charset.forName("UTF-8");
-
-    public void parse(InputStream input) throws IOException {
-        CharStream charStream = CharStreams.fromStream(input, CHARSET);
+    public IConfigNode parse(Reader input) throws IOException {
+        CharStream charStream = CharStreams.fromReader(input);
 
         L lexer = produceLexer(charStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -29,14 +28,14 @@ public abstract class ConfigLoader<L extends Lexer, P extends Parser> {
             //STAGE 1
             logger.debug("Trying to run STAGE 1 parsing. (SSL prediction)");
             parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-            parse(parser);
+            return traverse(parse(parser));
         } catch (Exception ex) {
-            logger.debug("Trying to run STAGE 2 parsing. (LL prediction)", ex);
             // STAGE 2
+            logger.debug("Trying to run STAGE 2 parsing. (LL prediction)", ex);
             tokens.seek(0); // rewind input stream
             parser.reset();
             parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-            parse(parser);
+            return traverse(parse(parser));
             // if we parse ok, it's LL not SLL
         }
     }
@@ -45,5 +44,7 @@ public abstract class ConfigLoader<L extends Lexer, P extends Parser> {
 
     protected abstract P produceParser(CommonTokenStream tokenStream) throws IOException;
 
-    protected abstract void parse(P parser);
+    protected abstract ParseTree parse(P parser);
+
+    protected abstract IConfigNode traverse(ParseTree root);
 }

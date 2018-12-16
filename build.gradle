@@ -67,6 +67,64 @@ dependencies {
 
 apply from: './buildLang.gradle'
 
+compileJava() {
+    dependsOn 'compileApiJava'
+}
+
+compileLangJava() {
+    dependsOn 'compileJava'
+}
+
+task apiJar(type: Jar) {
+    baseName = 'confort'
+    version = project.version
+    classifier = 'api'
+
+    from sourceSets.api.allJava
+    from sourceSets.api.output
+    
+    dependsOn 'compileApiJava'
+}
+
+task langJar(type: Jar) {
+    baseName = 'confort'
+    version = project.version
+    classifier = 'langs'
+
+    from sourceSets.lang.output
+
+    dependsOn 'compileLangJava'
+}
+
+task runtimeJar(type: Jar) {
+    baseName = 'confort'
+    version = project.version
+    classifier = 'runtime'
+
+    from sourceSets.main.output
+    
+    dependsOn 'compileJava'
+}
+
+task allJar(type: Jar) {
+    baseName = 'confort'
+    version = project.version
+    classifier = 'all'
+    
+    from sourceSets.api.output
+    from sourceSets.main.output
+    from sourceSets.lang.output
+    
+    dependsOn 'compileLangJava'
+}
+
+build {
+    dependsOn 'apiJar'
+    dependsOn 'langJar'
+    dependsOn 'runtimeJar'
+    dependsOn 'allJar'
+}
+
 wrapper {
     gradleVersion = '4.2.1'
     distributionType = Wrapper.DistributionType.ALL

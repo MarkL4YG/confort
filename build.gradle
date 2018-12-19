@@ -5,12 +5,18 @@ plugins {
 }
 
 group 'de.mlessmann'
-version '1.0.0-SNAPSHOT'
+def projectVersion = '0.1.0'
+
+if (!project.hasProperty("release")) {
+    projectVersion = projectVersion + '-SNAPSHOT'
+}
+version projectVersion
 
 sourceCompatibility = 1.8
 
 /// === Configuration === ///
 project.ext {
+    artifact = 'confort'
     antlrVersion = '4.7.1'
 }
 
@@ -65,65 +71,9 @@ dependencies {
 
 /// ===== Tasks ===== ///
 
-apply from: './buildLang.gradle'
-
-compileJava() {
-    dependsOn 'compileApiJava'
-}
-
-compileLangJava() {
-    dependsOn 'compileJava'
-}
-
-task apiJar(type: Jar) {
-    baseName = 'confort'
-    version = project.version
-    classifier = 'api'
-
-    from sourceSets.api.allJava
-    from sourceSets.api.output
-    
-    dependsOn 'compileApiJava'
-}
-
-task langJar(type: Jar) {
-    baseName = 'confort'
-    version = project.version
-    classifier = 'langs'
-
-    from sourceSets.lang.output
-
-    dependsOn 'compileLangJava'
-}
-
-task runtimeJar(type: Jar) {
-    baseName = 'confort'
-    version = project.version
-    classifier = 'runtime'
-
-    from sourceSets.main.output
-    
-    dependsOn 'compileJava'
-}
-
-task allJar(type: Jar) {
-    baseName = 'confort'
-    version = project.version
-    classifier = 'all'
-    
-    from sourceSets.api.output
-    from sourceSets.main.output
-    from sourceSets.lang.output
-    
-    dependsOn 'compileLangJava'
-}
-
-build {
-    dependsOn 'apiJar'
-    dependsOn 'langJar'
-    dependsOn 'runtimeJar'
-    dependsOn 'allJar'
-}
+apply from: './antlr.gradle'
+apply from: './artifacts.gradle'
+apply from: './publication.gradle'
 
 wrapper {
     gradleVersion = '4.2.1'

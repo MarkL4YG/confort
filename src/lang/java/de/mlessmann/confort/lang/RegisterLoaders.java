@@ -8,7 +8,6 @@ public class RegisterLoaders {
     public static void registerLoaders() {
         if (!LoaderFactory.hasAny()) {
             LoaderFactory.registerLoader(
-                    "json",
                     JSONConfigLoader.class,
                     JSONConfigLoader::new
             );

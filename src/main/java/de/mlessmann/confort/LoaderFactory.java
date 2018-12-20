@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class LoaderFactory {
@@ -34,23 +32,31 @@ public class LoaderFactory {
         REGISTRATIONS.add(reg);
     }
 
-    private static final Map<String, ConfigLoader> LOADERS = new ConcurrentHashMap<>();
     private static final List<FormatRegistration<? extends ConfigLoader>> REGISTRATIONS =
             Collections.synchronizedList(new LinkedList<>());
 
     public static ConfigLoader getLoader(String protocol) {
-        ConfigLoader loader = LOADERS.getOrDefault(protocol, null);
+        final Supplier[] supplier = new Supplier[]{null};
+        REGISTRATIONS.stream()
+                .filter(reg -> reg.matches(protocol))
+                .forEach(reg -> {
+                    if (supplier[0] == null) {
+                        supplier[0] = reg.getProducer();
+                    } else {
+                        String message = String.format("Ambiguous loaders found for %s", protocol);
+                        throw new LoaderLookupException(message);
+                    }
+                });
 
-        if (loader == null) {
-            String message = String.format("No loader defined for protocol: \"%s\"", protocol);
-            throw new LoaderLookupException(message);
+        if (supplier[0] == null) {
+            throw new LoaderLookupException(String.format("No loader found for protocol: %s", protocol));
         }
 
-        return loader;
+        return ((ConfigLoader) supplier[0].get());
     }
 
     public static boolean hasAny() {
-        return LOADERS.size() > 0;
+        return !REGISTRATIONS.isEmpty();
     }
 
     private LoaderFactory() {

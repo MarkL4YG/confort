@@ -8,9 +8,11 @@ publishing {
             name = 'FNGNexus'
             url uri(project.version.endsWith('SNAPSHOT') ? snapshotRepository : releaseRepository)
 
-            credentials {
-                username "$fngNexusUser"
-                password "$fngNexusPass"
+            if (project.hasProperty('fngNexusUser') && project.hasProperty('fngNexusPass')) {
+                credentials {
+                    username "$fngNexusUser"
+                    password "$fngNexusPass"
+                }
             }
         }
     }

@@ -29,7 +29,7 @@ build:
 
 test:
   stage: test
-  script: gradle check
+  script: gradle --build-cache check
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -37,9 +37,9 @@ test:
       - build
       - .gradle
 
-publish_snapshop:
+publish_snapshot:
   stage: deploy
-  script: gradle publish
+  script: gradle --build-cache publish
   cache:
     key: "SNA-$CI_COMMIT_REF_NAME"
     policy: pull

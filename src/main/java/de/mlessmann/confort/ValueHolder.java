@@ -4,6 +4,7 @@ import de.mlessmann.confort.api.IValueHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class ValueHolder implements IValueHolder {
@@ -23,6 +24,11 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
+    public Boolean getBoolean() {
+        return optBoolean().orElseThrow(() -> new NoSuchElementException("Not set to a Boolean!"));
+    }
+
+    @Override
     public void setBoolean(Boolean value) {
         setValue(value);
     }
@@ -35,6 +41,11 @@ public class ValueHolder implements IValueHolder {
     @Override
     public Optional<String> optString() {
         return optValue(String.class);
+    }
+
+    @Override
+    public String getString() {
+        return optString().orElseThrow(() -> new NoSuchElementException("Not set to a String!"));
     }
 
     @Override
@@ -53,6 +64,11 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
+    public Integer getInteger() {
+        return optInteger().orElseThrow(() -> new NoSuchElementException("Not set to an Integer!"));
+    }
+
+    @Override
     public void setInteger(Integer value) {
         setValue(value);
     }
@@ -68,6 +84,11 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
+    public Float getFloat() {
+        return optFloat().orElseThrow(() -> new NoSuchElementException("Not set to a Float!"));
+    }
+
+    @Override
     public void setFloat(Float value) {
         setValue(value);
     }
@@ -80,6 +101,11 @@ public class ValueHolder implements IValueHolder {
     @Override
     public Optional<Double> optDouble() {
         return optValue(Double.class);
+    }
+
+    @Override
+    public Double getDouble() {
+        return optDouble().orElseThrow(() -> new NoSuchElementException("Not set to a Double!"));
     }
 
     @Override

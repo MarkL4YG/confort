@@ -1,5 +1,6 @@
 package de.mlessmann.confort.api;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 /**
@@ -17,11 +18,15 @@ public interface IValueHolder {
 
     Optional<Boolean> optBoolean();
 
+    Boolean getBoolean();
+
     void setBoolean(Boolean value);
 
     String asString();
 
     Optional<String> optString();
+
+    String getString();
 
     void setString(String value);
 
@@ -29,17 +34,23 @@ public interface IValueHolder {
 
     Optional<Integer> optInteger();
 
+    Integer getInteger();
+
     void setInteger(Integer value);
 
     Float asFloat();
 
     Optional<Float> optFloat();
 
+    Float getFloat();
+
     void setFloat(Float value);
 
     Double asDouble();
 
     Optional<Double> optDouble();
+
+    Double getDouble();
 
     void setDouble(Double value);
 

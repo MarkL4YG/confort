@@ -59,4 +59,6 @@ public interface IValueHolder {
     <T> T getValue(Class<T> hint);
 
     <T> Optional<T> optValue(Class<T> hint);
+
+    <T> boolean defaultValue(T value);
 }

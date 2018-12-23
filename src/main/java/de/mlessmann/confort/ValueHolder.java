@@ -143,4 +143,13 @@ public class ValueHolder implements IValueHolder {
     public <T> Optional<T> optValue(Class<T> hint) {
         return Optional.ofNullable(getValue(hint));
     }
+
+    @Override
+    public synchronized <T> boolean defaultValue(T value) {
+        if (getValue() == null) {
+            setValue(value);
+            return true;
+        }
+        return false;
+    }
 }

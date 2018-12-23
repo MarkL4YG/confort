@@ -15,5 +15,7 @@ public interface IConfig {
 
     void createRoot();
 
+    void setRoot(IConfigNode root);
+
     IConfigNode getRoot();
 }

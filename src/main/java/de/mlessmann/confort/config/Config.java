@@ -49,6 +49,11 @@ public abstract class Config implements IConfig {
         return root;
     }
 
+    @Override
+    public synchronized void setRoot(IConfigNode root) {
+        this.root = root;
+    }
+
     protected abstract Writer produceWriter() throws IOException;
 
     protected abstract Reader produceReader() throws IOException;

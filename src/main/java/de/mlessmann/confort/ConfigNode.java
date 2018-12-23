@@ -15,8 +15,18 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     }
 
     @Override
+    public Optional<Map<String, IConfigNode>> optMap() {
+        return Optional.ofNullable(isMap() ? asMap() : null);
+    }
+
+    @Override
     public boolean isList() {
         return getValue() == null && !list.isEmpty();
+    }
+
+    @Override
+    public Optional<List<IConfigNode>> optList() {
+        return Optional.ofNullable(isList() ? asList() : null);
     }
 
     @Override

@@ -137,7 +137,7 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
         return node;
     }
 
-    private IConfigNode throwUnmatched(ParseTree tree) {
+    private IConfigNode throwUnmatched(ParseTree tree) throws ParseVisitException {
         String message = String.format("Unmatched element! %s", tree.getClass().getSimpleName());
         UnmatchedContextException ex = new UnmatchedContextException(message);
         ex.setContext(tree);

@@ -2,6 +2,7 @@ package de.mlessmann.confort.tests.json;
 
 import de.mlessmann.confort.LoaderFactory;
 import de.mlessmann.confort.api.IConfigNode;
+import de.mlessmann.confort.api.except.ParseException;
 import de.mlessmann.confort.lang.RegisterLoaders;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,7 +34,7 @@ public class DeserializeJSONTest {
         try (InputStreamReader reader = new InputStreamReader(getFooStream(), Charset.forName("UTF-8"))) {
             rootNode = LoaderFactory.getLoader("json").parse(reader);
 
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
     }

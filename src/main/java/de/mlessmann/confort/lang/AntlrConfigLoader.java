@@ -1,6 +1,7 @@
 package de.mlessmann.confort.lang;
 
 import de.mlessmann.confort.api.IConfigNode;
+import de.mlessmann.confort.api.except.ParseException;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -14,7 +15,7 @@ public abstract class AntlrConfigLoader<L extends Lexer, P extends Parser> exten
 
     private static final Logger logger = LoggerFactory.getLogger(AntlrConfigLoader.class);
 
-    public IConfigNode parse(Reader input) throws IOException {
+    public IConfigNode parse(Reader input) throws IOException, ParseException {
         CharStream charStream = CharStreams.fromReader(input);
 
         L lexer = produceLexer(charStream);
@@ -35,7 +36,12 @@ public abstract class AntlrConfigLoader<L extends Lexer, P extends Parser> exten
             tokens.seek(0); // rewind input stream
             parser.reset();
             parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-            return traverse(parse(parser));
+
+            try {
+                return traverse(parse(parser));
+            } catch (ParseVisitException e) {
+                throw new ParseException(e);
+            }
             // if we parse ok, it's LL not SLL
         }
     }

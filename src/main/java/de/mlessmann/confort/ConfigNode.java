@@ -26,7 +26,9 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     @Override
     public boolean isVirtual() {
-        return map.isEmpty() && list.isEmpty() && getValue() == null;
+        return map.values().stream().allMatch(IConfigNode::isVirtual)
+                && list.stream().allMatch(IConfigNode::isVirtual)
+                && getValue() == null;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
             return this;
 
         } else if (path.length == 1) {
-            return map.getOrDefault(path[0], new ConfigNode());
+            return map.computeIfAbsent(path[0], key -> new ConfigNode());
 
         } else {
             IConfigNode currentTarget = this;

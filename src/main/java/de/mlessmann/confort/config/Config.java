@@ -1,8 +1,10 @@
 package de.mlessmann.confort.config;
 
+import de.mlessmann.confort.ConfigNode;
 import de.mlessmann.confort.api.IConfig;
 import de.mlessmann.confort.api.IConfigLoader;
 import de.mlessmann.confort.api.IConfigNode;
+import de.mlessmann.confort.api.except.ParseException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -23,12 +25,19 @@ public abstract class Config implements IConfig {
 
     @Override
     public synchronized void save() throws IOException {
-        loader.save(root, produceWriter());
+        if (root != null) {
+            loader.save(root, produceWriter());
+        }
     }
 
     @Override
-    public synchronized void load() throws IOException {
+    public synchronized void load() throws IOException, ParseException {
         root = loader.parse(produceReader());
+    }
+
+    @Override
+    public synchronized void createRoot() {
+        root = new ConfigNode();
     }
 
     @Override

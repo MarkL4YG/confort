@@ -1,12 +1,14 @@
 package de.mlessmann.confort.api;
 
+import de.mlessmann.confort.api.except.ParseException;
+
 import java.io.*;
 
 public interface IConfigLoader {
 
-    IConfigNode parse(File file) throws IOException;
+    IConfigNode parse(File file) throws IOException, ParseException;
 
-    IConfigNode parse(Reader reader) throws IOException;
+    IConfigNode parse(Reader reader) throws IOException, ParseException;
 
     void save(IConfigNode root, File file) throws IOException;
 

@@ -26,13 +26,17 @@ public abstract class Config implements IConfig {
     @Override
     public synchronized void save() throws IOException {
         if (root != null) {
-            loader.save(root, produceWriter());
+            try (Writer writer = produceWriter()) {
+                loader.save(root, writer);
+            }
         }
     }
 
     @Override
     public synchronized void load() throws IOException, ParseException {
-        root = loader.parse(produceReader());
+        try (Reader reader = produceReader()) {
+            root = loader.parse(reader);
+        }
     }
 
     @Override

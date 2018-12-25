@@ -70,11 +70,13 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     @Override
     public synchronized void prepend(IConfigNode child) {
+        super.setValue(null);
         list.add(0, child);
     }
 
     @Override
     public synchronized void append(IConfigNode child) {
+        super.setValue(null);
         list.add(child);
     }
 
@@ -85,6 +87,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     @Override
     public synchronized void put(String childName, IConfigNode child) {
+        super.setValue(null);
         map.put(childName, child);
     }
 
@@ -103,5 +106,12 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
         }
 
         return isVirtual();
+    }
+
+    @Override
+    protected synchronized void setValue(Object value) {
+        list.clear();
+        map.clear();
+        super.setValue(value);
     }
 }

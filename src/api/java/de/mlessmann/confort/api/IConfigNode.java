@@ -26,4 +26,6 @@ public interface IConfigNode extends IConfigNodePrimitive, IConfigNodeList, ICon
     boolean isVirtual();
 
     boolean collapse();
+
+    IConfigNode createNewInstance();
 }

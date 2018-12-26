@@ -227,4 +227,9 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
                 .forEach(ConfigNode::detachParent);
         map.clear();
     }
+
+    @Override
+    public IConfigNode createNewInstance() {
+        return new ConfigNode();
+    }
 }

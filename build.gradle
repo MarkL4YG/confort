@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'de.mlessmann'
-def projectVersion = '0.2.8'
+def projectVersion = '0.2.9'
 
 if (!project.hasProperty("release")) {
     projectVersion = projectVersion + '-SNAPSHOT'

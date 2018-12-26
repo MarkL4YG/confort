@@ -1,6 +1,6 @@
 package de.mlessmann.confort.lang;
 
-import de.mlessmann.confort.ConfigNode;
+import de.mlessmann.confort.node.ConfigNode;
 import de.mlessmann.confort.api.IConfigLoader;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;

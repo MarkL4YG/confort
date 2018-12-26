@@ -1,6 +1,6 @@
 package de.mlessmann.confort.lang.json;
 
-import de.mlessmann.confort.ConfigNode;
+import de.mlessmann.confort.node.ConfigNode;
 import de.mlessmann.confort.antlr.JSONParser;
 import de.mlessmann.confort.antlr.JSONParserBaseVisitor;
 import de.mlessmann.confort.api.IConfigNode;

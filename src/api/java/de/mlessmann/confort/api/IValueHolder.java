@@ -18,7 +18,7 @@ public interface IValueHolder {
 
     Optional<Boolean> optBoolean();
 
-    Boolean getBoolean();
+    Boolean optBoolean(Boolean def);
 
     void setBoolean(Boolean value);
 
@@ -26,7 +26,7 @@ public interface IValueHolder {
 
     Optional<String> optString();
 
-    String getString();
+    String optString(String def);
 
     void setString(String value);
 
@@ -34,7 +34,7 @@ public interface IValueHolder {
 
     Optional<Integer> optInteger();
 
-    Integer getInteger();
+    Integer optInteger(Integer def);
 
     void setInteger(Integer value);
 
@@ -42,7 +42,7 @@ public interface IValueHolder {
 
     Optional<Float> optFloat();
 
-    Float getFloat();
+    Float optFloat(Float def);
 
     void setFloat(Float value);
 
@@ -50,7 +50,7 @@ public interface IValueHolder {
 
     Optional<Double> optDouble();
 
-    Double getDouble();
+    Double optDouble(Double def);
 
     void setDouble(Double value);
 

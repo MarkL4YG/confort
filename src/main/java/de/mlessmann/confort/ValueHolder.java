@@ -15,7 +15,7 @@ public class ValueHolder implements IValueHolder {
 
     @Override
     public Boolean asBoolean() {
-        return getValue(Boolean.class);
+        return optBoolean().orElseThrow(() -> new NoSuchElementException("Not set to a Boolean!"));
     }
 
     @Override
@@ -24,8 +24,8 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
-    public Boolean getBoolean() {
-        return optBoolean().orElseThrow(() -> new NoSuchElementException("Not set to a Boolean!"));
+    public Boolean optBoolean(Boolean def) {
+        return optBoolean().orElse(def);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ValueHolder implements IValueHolder {
 
     @Override
     public String asString() {
-        return getValue(String.class);
+        return optString().orElseThrow(() -> new NoSuchElementException("Not set to a String!"));
     }
 
     @Override
@@ -44,8 +44,8 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
-    public String getString() {
-        return optString().orElseThrow(() -> new NoSuchElementException("Not set to a String!"));
+    public String optString(String def) {
+        return optString().orElse(def);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ValueHolder implements IValueHolder {
 
     @Override
     public Integer asInteger() {
-        return getValue(Integer.class);
+        return optInteger().orElseThrow(() -> new NoSuchElementException("Not set to an Integer!"));
     }
 
     @Override
@@ -64,8 +64,8 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
-    public Integer getInteger() {
-        return optInteger().orElseThrow(() -> new NoSuchElementException("Not set to an Integer!"));
+    public Integer optInteger(Integer def) {
+        return optInteger().orElse(def);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ValueHolder implements IValueHolder {
 
     @Override
     public Float asFloat() {
-        return getValue(Float.class);
+        return optFloat().orElseThrow(() -> new NoSuchElementException("Not set to a Float!"));
     }
 
     @Override
@@ -84,8 +84,8 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
-    public Float getFloat() {
-        return optFloat().orElseThrow(() -> new NoSuchElementException("Not set to a Float!"));
+    public Float optFloat(Float def) {
+        return optFloat().orElse(def);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ValueHolder implements IValueHolder {
 
     @Override
     public Double asDouble() {
-        return getValue(Double.class);
+        return optDouble().orElseThrow(() -> new NoSuchElementException("Not set to a Double!"));
     }
 
     @Override
@@ -104,8 +104,8 @@ public class ValueHolder implements IValueHolder {
     }
 
     @Override
-    public Double getDouble() {
-        return optDouble().orElseThrow(() -> new NoSuchElementException("Not set to a Double!"));
+    public Double optDouble(Double def) {
+        return optDouble().orElse(def);
     }
 
     @Override

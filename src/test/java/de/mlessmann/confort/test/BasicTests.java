@@ -29,13 +29,13 @@ public class BasicTests {
         root.getNode("foo", "tee").defaultValue("turtle");
         assertFalse(root.getNode("foo").isVirtual());
         assertFalse(root.getNode("foo", "tee").isVirtual());
-        assertEquals("turtle", root.getNode("foo", "tee").getString());
+        assertEquals("turtle", root.getNode("foo", "tee").asString());
     }
 
     @Test
     public void primitiveValueResets() {
         root.getNode("tee").setString("test");
-        assertEquals("test", root.getNode("tee").getString());
+        assertEquals("test", root.getNode("tee").asString());
         root.getNode("tee").append(new ConfigNode());
         assertEquals("nonpresent", root.getNode("tee").optString().orElse("nonpresent"));
     }

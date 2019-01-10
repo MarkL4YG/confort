@@ -1,10 +1,14 @@
 package de.mlessmann.confort.config;
 
 import de.mlessmann.confort.api.IConfigLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
 public class FileConfig extends Config {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileConfig.class);
 
     private File file;
 
@@ -15,6 +19,10 @@ public class FileConfig extends Config {
 
     @Override
     protected Writer produceWriter() throws IOException {
+        final File directory = file.getAbsoluteFile().getParentFile();
+        if (directory == null || (!directory.isDirectory() && !directory.mkdirs())) {
+            throw new IOException("Cannot create configuration parent directory: " + directory);
+        }
         return new OutputStreamWriter(new FileOutputStream(file), getEncoding());
     }
 

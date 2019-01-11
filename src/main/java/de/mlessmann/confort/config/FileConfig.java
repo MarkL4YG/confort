@@ -1,6 +1,6 @@
 package de.mlessmann.confort.config;
 
-import de.mlessmann.confort.api.IConfigLoader;
+import de.mlessmann.confort.api.lang.IConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

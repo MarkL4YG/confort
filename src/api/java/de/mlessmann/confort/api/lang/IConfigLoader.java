@@ -1,5 +1,6 @@
-package de.mlessmann.confort.api;
+package de.mlessmann.confort.api.lang;
 
+import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;
 
 import java.io.*;

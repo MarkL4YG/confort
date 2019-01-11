@@ -1,15 +1,16 @@
 {
-  "nan": "__NaN__f",
-  "inf": "__Inf__f",
-  "Ninf": "__Inf-__f",
+  "nan": "__NaN_f",
+  "inf": "__Infinity_f",
+  "Ninf": "__-Infinity_f",
 
-  "nanD": "__NaN__d",
-  "infD": "__Inf__d",
-  "NinfD": "__Inf-__d",
+  "nanD": "__NaN_d",
+  "infD": "__Infinity_d",
+  "NinfD": "__-Infinity_d",
   "foo": {
     "bar": ["bar"],
     "num": 55,
     "float": 5555,
+    "string": "test",
     "tee": "tee"
   }
 }

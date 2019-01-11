@@ -53,11 +53,43 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
         } else if (ctx.NUMBER() != null) {
             return parseNumber(ctx.NUMBER(), node);
 
+        } else if (ctx.EXTRA_NOT_A_NUMBER() != null) {
+            return parseExtraNaN(ctx.EXTRA_NOT_A_NUMBER().getText(), node);
+
+        } else if (ctx.EXTRA_POSITIVE_INFINITY() != null) {
+            return parseExtraInfinity(false, ctx.EXTRA_POSITIVE_INFINITY().getText(), node);
+
+        } else if (ctx.EXTRA_NEGATIVE_INFINITY() != null) {
+            return parseExtraInfinity(true, ctx.EXTRA_NEGATIVE_INFINITY().getText(), node);
+
         } else if (ctx.STRING() != null) {
             return parseString(ctx.STRING(), node);
         }
 
         return throwUnmatched(ctx);
+    }
+
+    private IConfigNode parseExtraNaN(String str, IConfigNode node) {
+        if (str.endsWith("_f\"")) {
+            node.setFloat(Float.NaN);
+        } else if (str.endsWith("_d\"")) {
+            node.setDouble(Double.NaN);
+        } else {
+            throw new ParseVisitException("Could not determine number type for NaN value: " + str);
+        }
+
+        return node;
+    }
+
+    private IConfigNode parseExtraInfinity(boolean negative, String str, IConfigNode node) {
+        if (str.endsWith("_f\"")) {
+            node.setFloat(negative ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY);
+        } else if (str.endsWith("_d\"")) {
+            node.setDouble(negative ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
+        } else {
+            throw new ParseVisitException("Could not determine number type for Infinity value: " + str);
+        }
+        return node;
     }
 
     public IConfigNode parseNumber(TerminalNode numberTerminalNode, IConfigNode node) {
@@ -80,28 +112,6 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
 
     private IConfigNode parseString(TerminalNode ctx, IConfigNode node) {
         String str = unquoteString(ctx.getText());
-
-        // Certain numeric values cannot natively be represented by JSON.
-        // We work around that with special strings:
-        if (str.startsWith("__NaN")) {
-            if (str.endsWith("__f")) {
-                node.setFloat(Float.NaN);
-                return node;
-            } else if (str.endsWith("__d")) {
-                node.setDouble(Double.NaN);
-                return node;
-            }
-
-        } else if (str.startsWith("__Inf")) {
-            if (str.endsWith("__f")) {
-                node.setFloat(str.contains("-") ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY);
-                return node;
-            } else if (str.endsWith("__d")) {
-                node.setDouble(str.contains("-") ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
-                return node;
-            }
-        }
-
         node.setString(str);
         return node;
     }

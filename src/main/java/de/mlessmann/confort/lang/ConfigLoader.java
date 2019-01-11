@@ -1,7 +1,8 @@
 package de.mlessmann.confort.lang;
 
+import de.mlessmann.confort.api.lang.IConfigSerializer;
 import de.mlessmann.confort.node.ConfigNode;
-import de.mlessmann.confort.api.IConfigLoader;
+import de.mlessmann.confort.api.lang.IConfigLoader;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;
 
@@ -23,8 +24,6 @@ public abstract class ConfigLoader implements IConfigLoader {
         }
     }
 
-    public abstract IConfigNode parse(Reader reader) throws IOException, ParseException;
-
     public void save(IConfigNode root, File configFile) throws IOException {
         try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(configFile))) {
             save(root, out);
@@ -33,8 +32,8 @@ public abstract class ConfigLoader implements IConfigLoader {
 
     public void save(IConfigNode root, Writer writer) throws IOException {
         root.collapse();
-        getSerializer().serializeNode(root, writer);
+        getSerializer().serializeNode(root, writer, new SerializationContext());
     }
 
-    public abstract ConfigSerializer getSerializer();
+    public abstract IConfigSerializer getSerializer();
 }

@@ -3,9 +3,9 @@ package de.mlessmann.confort.lang.json;
 import de.mlessmann.confort.antlr.JSONLexer;
 import de.mlessmann.confort.antlr.JSONParser;
 import de.mlessmann.confort.api.IConfigNode;
+import de.mlessmann.confort.api.lang.IConfigSerializer;
 import de.mlessmann.confort.format.FormatRef;
 import de.mlessmann.confort.lang.AntlrConfigLoader;
-import de.mlessmann.confort.lang.ConfigSerializer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -44,7 +44,7 @@ public class JSONConfigLoader extends AntlrConfigLoader<JSONLexer, JSONParser> {
     }
 
     @Override
-    public ConfigSerializer getSerializer() {
+    public IConfigSerializer getSerializer() {
         return serializer;
     }
 }

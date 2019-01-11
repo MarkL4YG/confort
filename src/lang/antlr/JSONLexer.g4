@@ -42,6 +42,18 @@ WS
    : [ \t\n\r] + -> skip
    ;
 
+EXTRA_NOT_A_NUMBER
+  : '"__NaN' ('_d'|'_f') '"'
+  ;
+
+EXTRA_POSITIVE_INFINITY
+  : '"__Infinity' ('_d'|'_f') '"'
+  ;
+
+EXTRA_NEGATIVE_INFINITY
+  : '"__-Infinity' ('_d'|'_f') '"'
+  ;
+
 STRING
    : '"' (ESC | SAFECODEPOINT)* '"'
    ;

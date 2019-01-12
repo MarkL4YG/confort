@@ -31,8 +31,8 @@ public abstract class ConfigLoader implements IConfigLoader {
     }
 
     public void save(IConfigNode root, Writer writer) throws IOException {
-        root.collapse();
-        getSerializer().serializeNode(root, writer, new SerializationContext());
+        IConfigNode node = root.collapse() ? new ConfigNode() : root;
+        getSerializer().serializeNode(node, writer, new SerializationContext());
     }
 
     public abstract IConfigSerializer getSerializer();

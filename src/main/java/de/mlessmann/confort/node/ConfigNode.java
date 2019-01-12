@@ -22,11 +22,6 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
         parent = null;
     }
 
-    public ConfigNode(ConfigNode parent) {
-        this();
-        attachParent(parent);
-    }
-
     @Override
     public synchronized boolean isMap() {
         return trackingMode == TrackingMode.MAP;
@@ -54,7 +49,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     @Override
     public synchronized boolean isVirtual() {
-        if (trackingMode == TrackingMode.VIRTUAL) {
+        if (trackingMode == TrackingMode.VIRTUAL || trackingMode == TrackingMode.EXPLICIT_NULL) {
             return true;
 
         } else if (trackingMode == TrackingMode.LIST) {
@@ -148,13 +143,14 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public synchronized boolean collapse() {
         if (isList()) {
-            list.removeIf(IConfigNode::collapse);
+            removeIf(IConfigNode::collapse);
 
         } else if (isMap()) {
-            map.entrySet().removeIf(entry -> entry.getValue().collapse());
+            removeIf((k, v) -> v.collapse());
         }
 
-        if (isVirtual()) {
+        // Do not detach when we are told to track NULL!
+        if (isVirtual() && trackingMode != TrackingMode.EXPLICIT_NULL) {
             detachParent();
             return true;
         }
@@ -165,6 +161,11 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     protected synchronized void setValue(Object value) {
         super.setValue(value);
         setTrackingMode(value != null ? TrackingMode.PRIMITIVE : TrackingMode.VIRTUAL);
+    }
+
+    @Override
+    public synchronized void setNull() {
+        setTrackingMode(TrackingMode.EXPLICIT_NULL);
     }
 
     protected synchronized void reportTrackingChanged(IConfigNode node, TrackingMode mode) {
@@ -208,7 +209,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
             clearList();
             super.setValue(null);
 
-        } else if (mode == TrackingMode.VIRTUAL) {
+        } else if (mode == TrackingMode.VIRTUAL || mode == TrackingMode.EXPLICIT_NULL) {
             clearList();
             clearMap();
             super.setValue(null);

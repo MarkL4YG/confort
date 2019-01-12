@@ -60,6 +60,13 @@ public interface IConfigNode extends IConfigNodePrimitive, IConfigNodeList, ICon
     boolean collapse();
 
     /**
+     * Explicitly sets this node to hold a {@code null} value.
+     * This will explicitly disable {@link #collapse()} for this node.
+     * Note that this behavior is different from calling a setter with {@code null} as the parameter value.
+     */
+    void setNull();
+
+    /**
      * Return a new root node of the same implementation.
      * This exists to avoid users of the library having to know the node implementation.
      */

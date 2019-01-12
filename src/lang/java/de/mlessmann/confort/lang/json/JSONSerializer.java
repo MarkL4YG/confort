@@ -33,6 +33,11 @@ public class JSONSerializer extends AbstractIndentAwareSerializer {
     }
 
     @Override
+    protected void serializeNull(IConfigNode node, Writer writer, ISerializationContext ctx) throws IOException {
+        writer.write("null");
+    }
+
+    @Override
     protected String wrapSpecialNumber(Float value) {
         return wrapSpecialNumber(value.toString() + "_f");
     }

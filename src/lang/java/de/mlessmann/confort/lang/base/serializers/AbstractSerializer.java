@@ -59,7 +59,7 @@ public abstract class AbstractSerializer implements IConfigSerializer {
 
     protected abstract void serializeList(IConfigNode node, Writer writer, ISerializationContext ctx) throws IOException;
 
-    protected abstract void serializeNull(IConfigNode node, Writer writer, ISerializationContext ctx);
+    protected abstract void serializeNull(IConfigNode node, Writer writer, ISerializationContext ctx) throws IOException;
 
     protected abstract void writeBoolean(Boolean value, Writer writer) throws IOException;
 

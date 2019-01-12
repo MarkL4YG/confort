@@ -3,6 +3,7 @@ package de.mlessmann.confort.lang.base.serializers;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.lang.IConfigSerializer;
 import de.mlessmann.confort.api.lang.ISerializationContext;
+import de.mlessmann.confort.node.ConfigNode;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -11,8 +12,9 @@ public abstract class AbstractSerializer implements IConfigSerializer {
 
     @Override
     public void serializeNode(IConfigNode node, Writer writer, ISerializationContext ctx) throws IOException {
-
-        if (node.isPrimitive()) {
+        if (node.collapse()) {
+            serializeMap(new ConfigNode(), writer, ctx);
+        } else if (node.isPrimitive()) {
             serializePrimitive(node, writer, ctx);
         } else if (node.isMap()) {
             serializeMap(node, writer, ctx);

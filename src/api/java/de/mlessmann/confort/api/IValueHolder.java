@@ -60,5 +60,9 @@ public interface IValueHolder {
 
     <T> Optional<T> optValue(Class<T> hint);
 
+    /**
+     * If the node currently contains no value, the value will be set to the supplied value.
+     * @return true, when the value has been set to the provided default.
+     */
     <T> boolean defaultValue(T value);
 }

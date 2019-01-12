@@ -1,5 +1,9 @@
 package de.mlessmann.confort.api.except;
 
+/**
+ * Thrown when a value is tried to be retrieved from a {@link de.mlessmann.confort.api.IValueHolder}
+ * but the actually stored value does not match the required type.
+ */
 public class TypeMismatchException extends RuntimeException {
 
     public TypeMismatchException() {

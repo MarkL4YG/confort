@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class ConfigNode extends ValueHolder implements IConfigNode {
 
@@ -94,6 +96,16 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public synchronized IConfigNode remove(Integer index) {
         return list.remove(0);
+    }
+
+    @Override
+    public synchronized void removeIf(Predicate<IConfigNode> removeCondition) {
+        list.removeIf(removeCondition);
+    }
+
+    @Override
+    public synchronized void removeIf(BiPredicate<String, IConfigNode> removeCondition) {
+        map.entrySet().removeIf(entry -> removeCondition.test(entry.getKey(), entry.getValue()));
     }
 
     @Override

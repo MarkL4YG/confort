@@ -67,6 +67,18 @@ public interface IConfigNode extends IConfigNodePrimitive, IConfigNodeList, ICon
     void setNull();
 
     /**
+     * Explicitly sets this node to hold a {@code List} value.
+     * This will explicitly disable {@link #collapse()} for this node.
+     */
+    void setList();
+
+    /**
+     * Explicitly sets this node to hold a {@code Map} value.
+     * This will explicitly disable {@link #collapse()} for this node.
+     */
+    void setMap();
+
+    /**
      * Return a new root node of the same implementation.
      * This exists to avoid users of the library having to know the node implementation.
      */

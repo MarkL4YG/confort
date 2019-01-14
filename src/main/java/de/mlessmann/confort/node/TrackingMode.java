@@ -6,5 +6,8 @@ public enum TrackingMode {
     MAP,
     PRIMITIVE,
     VIRTUAL,
-    EXPLICIT_NULL
+
+    EXPLICIT_NULL,
+    EXPLICIT_LIST,
+    EXPLICIT_MAP
 }

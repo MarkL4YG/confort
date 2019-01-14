@@ -13,18 +13,14 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigNode.class);
 
-    private ConfigNode parent;
+    private ConfigNode parent = null;
     private Map<String, IConfigNode> map = new TreeMap<>();
     private List<IConfigNode> list = new LinkedList<>();
     private TrackingMode trackingMode = TrackingMode.VIRTUAL;
 
-    public ConfigNode() {
-        parent = null;
-    }
-
     @Override
     public synchronized boolean isMap() {
-        return trackingMode == TrackingMode.MAP;
+        return trackingMode == TrackingMode.MAP || trackingMode == TrackingMode.EXPLICIT_MAP;
     }
 
     @Override
@@ -34,7 +30,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     @Override
     public synchronized boolean isList() {
-        return trackingMode == TrackingMode.LIST;
+        return trackingMode == TrackingMode.LIST || trackingMode == TrackingMode.EXPLICIT_LIST;
     }
 
     @Override
@@ -51,6 +47,9 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     public synchronized boolean isVirtual() {
         if (trackingMode == TrackingMode.VIRTUAL || trackingMode == TrackingMode.EXPLICIT_NULL) {
             return true;
+
+        } else if (trackingMode == TrackingMode.EXPLICIT_LIST || trackingMode == TrackingMode.EXPLICIT_MAP) {
+            return false;
 
         } else if (trackingMode == TrackingMode.LIST) {
             return list.isEmpty() || list.stream().allMatch(IConfigNode::isVirtual);
@@ -166,6 +165,16 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public synchronized void setNull() {
         setTrackingMode(TrackingMode.EXPLICIT_NULL);
+    }
+
+    @Override
+    public void setList() {
+        setTrackingMode(TrackingMode.EXPLICIT_LIST);
+    }
+
+    @Override
+    public void setMap() {
+        setTrackingMode(TrackingMode.EXPLICIT_MAP);
     }
 
     protected synchronized void reportTrackingChanged(IConfigNode node, TrackingMode mode) {

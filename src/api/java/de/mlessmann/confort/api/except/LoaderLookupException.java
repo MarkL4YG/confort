@@ -1,4 +1,4 @@
-package de.mlessmann.confort.except;
+package de.mlessmann.confort.api.except;
 
 public class LoaderLookupException extends RuntimeException {
 

@@ -1,11 +1,9 @@
 package de.mlessmann.confort;
 
-import de.mlessmann.confort.except.LoaderLookupException;
+import de.mlessmann.confort.api.except.LoaderLookupException;
+import de.mlessmann.confort.api.lang.IConfigLoader;
 import de.mlessmann.confort.format.FormatRef;
-import de.mlessmann.confort.lang.ConfigLoader;
-import de.mlessmann.confort.lang.FormatRegistration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.mlessmann.confort.format.FormatRegistration;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -14,9 +12,7 @@ import java.util.function.Supplier;
 
 public class LoaderFactory {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoaderFactory.class);
-
-    public static <T extends ConfigLoader> void registerLoader(
+    public static <T extends IConfigLoader> void registerLoader(
             Class<T> loaderClass,
             Supplier<T> loaderProducer) {
         if (loaderClass == null) {
@@ -28,14 +24,14 @@ public class LoaderFactory {
             throw new IllegalStateException("Cannot register unannotated loader class!");
         }
 
-        FormatRegistration<? extends ConfigLoader> reg = new FormatRegistration<>(formatRef, loaderProducer);
+        FormatRegistration<? extends IConfigLoader> reg = new FormatRegistration<>(formatRef, loaderProducer);
         REGISTRATIONS.add(reg);
     }
 
-    private static final List<FormatRegistration<? extends ConfigLoader>> REGISTRATIONS =
+    private static final List<FormatRegistration<? extends IConfigLoader>> REGISTRATIONS =
             Collections.synchronizedList(new LinkedList<>());
 
-    public static ConfigLoader getLoader(String protocol) {
+    public static IConfigLoader getLoader(String protocol) {
         final Supplier[] supplier = new Supplier[]{null};
         REGISTRATIONS.stream()
                 .filter(reg -> reg.matches(protocol))
@@ -52,7 +48,7 @@ public class LoaderFactory {
             throw new LoaderLookupException(String.format("No loader found for protocol: %s", protocol));
         }
 
-        return ((ConfigLoader) supplier[0].get());
+        return ((IConfigLoader) supplier[0].get());
     }
 
     public static boolean hasAny() {

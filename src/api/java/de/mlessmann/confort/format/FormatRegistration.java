@@ -1,10 +1,10 @@
-package de.mlessmann.confort.lang;
+package de.mlessmann.confort.format;
 
-import de.mlessmann.confort.format.FormatRef;
+import de.mlessmann.confort.api.lang.IConfigLoader;
 
 import java.util.function.Supplier;
 
-public class FormatRegistration<T extends ConfigLoader> {
+public class FormatRegistration<T extends IConfigLoader> {
 
     private FormatRef specs;
     private Supplier<T> producer;

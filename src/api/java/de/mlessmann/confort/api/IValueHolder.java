@@ -63,6 +63,9 @@ public interface IValueHolder {
     /**
      * If the node currently contains no value, the value will be set to the supplied value.
      * @return true, when the value has been set to the provided default.
+     * @deprecated Legacy feature. Will be removed sooner than later. Load a default from the resources instead.
+     * @implNote Undocumented behavior with non-primitive values!
      */
+    @Deprecated
     <T> boolean defaultValue(T value);
 }

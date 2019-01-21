@@ -210,11 +210,11 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
             clearList();
             clearMap();
 
-        } else if (mode == TrackingMode.LIST) {
+        } else if (mode == TrackingMode.LIST || mode == TrackingMode.EXPLICIT_LIST) {
             clearMap();
             super.setValue(null);
 
-        } else if (mode == TrackingMode.MAP) {
+        } else if (mode == TrackingMode.MAP || mode == TrackingMode.EXPLICIT_MAP) {
             clearList();
             super.setValue(null);
 

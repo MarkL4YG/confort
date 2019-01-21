@@ -59,6 +59,12 @@ public class DeserializeJSONTest {
     }
 
     @Test
+    public void test_escaped_Strings() {
+        assertEquals("\n\n\\n", rootNode.getNode("escaped").asString());
+        assertEquals("4", rootNode.getNode("unicode").asString());
+    }
+
+    @Test
     public void test_write_Save() {
         try {
             StringWriter testWriter = new StringWriter();

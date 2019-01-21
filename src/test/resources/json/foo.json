@@ -12,5 +12,7 @@
     "float": 5555,
     "string": "test",
     "tee": "tee"
-  }
+  },
+  "escaped": "\n\n\\n",
+  "unicode": "\u0034"
 }

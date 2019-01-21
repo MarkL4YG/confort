@@ -3,6 +3,7 @@ package de.mlessmann.confort.lang.json;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.lang.ISerializationContext;
 import de.mlessmann.confort.lang.base.serializers.AbstractIndentAwareSerializer;
+import de.mlessmann.confort.lang.codepoint.EscapeMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,19 +12,14 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class JSONSerializer extends AbstractIndentAwareSerializer {
-
-    private static final Pattern JSON_ESCAPE_CHARS = Pattern.compile("[\"\\\\]");
 
     private static final Logger logger = LoggerFactory.getLogger(JSONSerializer.class);
 
     private static boolean nanWarningIssued = false;
 
-    private static String jsonEscape(String input) {
-        return JSON_ESCAPE_CHARS.matcher(input).replaceAll("\\$1");
-    }
+    private EscapeMachine escapeMachine = new JSONEscapeMachine();
 
     private static void nanWarn() {
         if (!nanWarningIssued) {
@@ -60,7 +56,7 @@ public class JSONSerializer extends AbstractIndentAwareSerializer {
     @Override
     protected void writeString(String value, Writer writer) throws IOException {
         writer.write("\"");
-        writer.write(jsonEscape(value));
+        writer.write(escapeMachine.escape(value));
         writer.write("\"");
     }
 

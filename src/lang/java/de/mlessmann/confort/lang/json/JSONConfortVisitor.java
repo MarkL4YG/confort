@@ -1,5 +1,6 @@
 package de.mlessmann.confort.lang.json;
 
+import de.mlessmann.confort.lang.codepoint.EscapeMachine;
 import de.mlessmann.confort.node.ConfigNode;
 import de.mlessmann.confort.antlr.JSONParser;
 import de.mlessmann.confort.antlr.JSONParserBaseVisitor;
@@ -10,6 +11,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
+
+    private EscapeMachine escapeMachine = new JSONEscapeMachine();
 
     @Override
     public IConfigNode visit(ParseTree tree) {
@@ -112,6 +115,7 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
 
     private IConfigNode parseString(TerminalNode ctx, IConfigNode node) {
         String str = unquoteString(ctx.getText());
+        str = escapeMachine.unescape(str);
         node.setString(str);
         return node;
     }

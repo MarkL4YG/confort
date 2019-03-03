@@ -3,7 +3,6 @@ package de.mlessmann.confort.lang.json;
 import de.mlessmann.confort.api.except.EscapeMachineException;
 import de.mlessmann.confort.lang.codepoint.EscapeContext;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 public class JSONEscapeContext extends EscapeContext {
@@ -30,17 +29,21 @@ public class JSONEscapeContext extends EscapeContext {
                     break;
                 case 't':
                     result.append('\t');
+                    escapeMode = false;
                     break;
                 case 'f':
                     result.append('\f');
+                    escapeMode = false;
                     break;
                 case 'b':
                     result.append('\b');
+                    escapeMode = false;
                     break;
                 case '/':
                 case '\\':
                 case '"':
                     result.append(c);
+                    escapeMode = false;
                     break;
                 case 'u':
                     unicodeMode = true;
@@ -99,6 +102,11 @@ public class JSONEscapeContext extends EscapeContext {
                 break;
             case '\b':
                 result.append("\\b");
+                break;
+            case '/':
+            case '\\':
+            case '"':
+                result.append("\\").append(c);
                 break;
 
             default:

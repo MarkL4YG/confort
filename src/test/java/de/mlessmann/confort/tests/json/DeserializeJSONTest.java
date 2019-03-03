@@ -62,6 +62,7 @@ public class DeserializeJSONTest {
     public void test_escaped_Strings() {
         assertEquals("\n\n\\n", rootNode.getNode("escaped").asString());
         assertEquals("4", rootNode.getNode("unicode").asString());
+        assertEquals("Hello\"World\"", rootNode.getNode("escaped_quote").asString());
     }
 
     @Test

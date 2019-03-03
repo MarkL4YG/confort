@@ -14,5 +14,6 @@
     "tee": "tee"
   },
   "escaped": "\n\n\\n",
+  "escaped_quote": "Hello\"World\"",
   "unicode": "\u0034"
 }

@@ -14,7 +14,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     private static final Logger logger = LoggerFactory.getLogger(ConfigNode.class);
 
     private ConfigNode parent = null;
-    private Map<String, IConfigNode> map = new TreeMap<>();
+    private Map<String, IConfigNode> map = new LinkedHashMap<>();
     private List<IConfigNode> list = new LinkedList<>();
     private TrackingMode trackingMode = TrackingMode.VIRTUAL;
 

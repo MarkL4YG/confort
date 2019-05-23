@@ -1,0 +1,9 @@
+version: 2.1
+orbs:
+  gradle: circleci/gradle@1.0.11
+workflows:
+  build-and-publish-snapshot:
+    jobs:
+      - gradle/test
+      - gradle/run:
+        command: publish

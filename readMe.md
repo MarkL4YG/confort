@@ -4,6 +4,11 @@
 
 A configuration library based on nodes, trees and parsers generated from [ANTLR Grammars](https://www.antlr.org/).  
 
+## Badges
+| CircleCI (bleeding) | [![CircleCI](https://circleci.com/gh/MarkL4YG/confort/tree/develop.svg?style=svg)](https://circleci.com/gh/MarkL4YG/confort/tree/develop) |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| CircleCI (release)  | <tbd>                                                                                                                                     |                                                                                                                                          |
+
 ## Description
 This library makes configuration easy by completely hiding away format specifications, loading and saving from its users.  
 Registered loaders allow easy retrieval of the loader of the right format.

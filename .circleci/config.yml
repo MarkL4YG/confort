@@ -4,6 +4,8 @@ orbs:
 workflows:
   build-and-publish-snapshot:
     jobs:
-      - gradle/test
+      - gradle/test:
+          reports_path: build/test-reports
+          test_results_path: build/test-results
       - gradle/run:
           command: publish

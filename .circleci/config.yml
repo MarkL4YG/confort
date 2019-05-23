@@ -6,4 +6,4 @@ workflows:
     jobs:
       - gradle/test
       - gradle/run:
-        command: publish
+          command: publish

@@ -76,7 +76,7 @@ public class DeserializeHOCONTest {
             String savedText = testWriter.toString();
             savedText = savedText.replaceAll("\\s", "");
 
-            Config deserialized = ConfigFactory.load(savedText);
+            Config deserialized = ConfigFactory.parseString(savedText);
             assertTrue(deepHOCONEquals(rootNode, deserialized));
 
 
@@ -86,19 +86,19 @@ public class DeserializeHOCONTest {
     }
 
     private boolean deepHOCONEquals(IConfigNode confort, Object hocon) {
-        if (confort.isMap() && hocon instanceof Config) {
-            Config object = (Config) hocon;
+        if (confort.isMap() && hocon instanceof Map) {
+            Map object = (Map) hocon;
             Map<String, IConfigNode> confortMap = confort.asMap();
-            if (object.entrySet().size() != confortMap.size()) {
+            if (object.size() != confortMap.size()) {
                 return false;
             }
 
             for (Map.Entry<String, IConfigNode> entry : confortMap.entrySet()) {
-                if (object.atKey(entry.getKey()) == null) {
+                if (object.getOrDefault(entry.getKey(), null) == null) {
                     return false;
                 }
 
-                if (!deepHOCONEquals(entry.getValue(), object.atKey(entry.getKey()))) {
+                if (!deepHOCONEquals(entry.getValue(), object.getOrDefault(entry.getKey(), null))) {
                     return false;
                 }
             }

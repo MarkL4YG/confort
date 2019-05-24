@@ -5,9 +5,13 @@
 A configuration library based on nodes, trees and parsers generated from [ANTLR Grammars](https://www.antlr.org/).  
 
 ## Badges
-| CircleCI (bleeding) | [![CircleCI](https://circleci.com/gh/MarkL4YG/confort/tree/develop.svg?style=svg)](https://circleci.com/gh/MarkL4YG/confort/tree/develop) |
+
+| License             | ![GitHub](https://img.shields.io/github/license/markl4yg/confort.svg)                                                                     |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| CircleCI (release)  | <tbd>                                                                                                                                     |                                                                                                                                          |
+| CircleCI (bleeding) | [![CircleCI](https://circleci.com/gh/MarkL4YG/confort/tree/bleeding.svg?style=svg)](https://circleci.com/gh/MarkL4YG/confort/tree/bleeding) |
+| CircleCI (release)  | <tbd>                                                                                                                                     |
+| Snyk Security Check | [![Known Vulnerabilities](https://snyk.io/test/github/markl4yg/confort/badge.svg)](https://snyk.io/test/github/markl4yg/confort)          | 
+
 
 ## Description
 This library makes configuration easy by completely hiding away format specifications, loading and saving from its users.  

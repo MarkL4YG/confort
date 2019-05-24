@@ -11,6 +11,8 @@ import de.mlessmann.confort.node.ConfigNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.regex.Pattern;
+
 /**
  * Hocon visitor file.
  * Duplications with JSON are suppressed.
@@ -19,6 +21,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
 
     private EscapeMachine escapeMachine = new JSONEscapeMachine();
+    private static final Pattern SPECIAL_NUM_FLOAT = Pattern.compile("_f\"?$");
+    private static final Pattern SPECIAL_NUM_DOUBLE = Pattern.compile("_d\"?$");
 
     @Override
     public IConfigNode visit(ParseTree tree) {
@@ -79,9 +83,9 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
     }
 
     private IConfigNode parseExtraNaN(String str, IConfigNode node) {
-        if (str.endsWith("_f\"")) {
+        if (SPECIAL_NUM_FLOAT.matcher(str).find()) {
             node.setFloat(Float.NaN);
-        } else if (str.endsWith("_d\"")) {
+        } else if (SPECIAL_NUM_DOUBLE.matcher(str).find()) {
             node.setDouble(Double.NaN);
         } else {
             throw new ParseVisitException("Could not determine number type for NaN value: " + str);
@@ -91,9 +95,9 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
     }
 
     private IConfigNode parseExtraInfinity(boolean negative, String str, IConfigNode node) {
-        if (str.endsWith("_f\"")) {
+        if (SPECIAL_NUM_FLOAT.matcher(str).find()) {
             node.setFloat(negative ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY);
-        } else if (str.endsWith("_d\"")) {
+        } else if (SPECIAL_NUM_DOUBLE.matcher(str).find()) {
             node.setDouble(negative ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
         } else {
             throw new ParseVisitException("Could not determine number type for Infinity value: " + str);
@@ -140,7 +144,8 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
 
         ctx.pair().forEach(pair -> {
             String key = unquoteString(pair.STRING().getText());
-            node.put(key, visitValue(pair.value()));
+            IConfigNode valNode = pair.obj() != null ? visitObj(pair.obj()) : visitValue(pair.value());
+            node.put(key, valNode);
         });
 
         return node;

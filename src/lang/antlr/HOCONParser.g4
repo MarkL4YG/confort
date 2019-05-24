@@ -11,8 +11,8 @@ hocon
    ;
 
 obj
-   : CURLY_OPEN pair ((BREAK) pair)* CURLY_CLOSE
-   | CURLY_OPEN BREAK* CURLY_CLOSE
+   : CURLY_OPEN pair ((COMMA | BREAK) BREAK? pair)* BREAK CURLY_CLOSE
+   | CURLY_OPEN BREAK CURLY_CLOSE
    ;
 
 pair

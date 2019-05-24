@@ -23,9 +23,8 @@ fragment SAFECODEPOINT
    ;
 
 fragment UNQUOT_STR
-   : [a-zA-Z][a-zA-Z0-9_\-]+ {!_input.getText(new Interval(0, 5)).startsWith("false") && !_input.getText(new Interval(0, 4)).startsWith("true") && !_input.getText(new Interval(0,4)).startsWith("null")}?
+   : [a-zA-Z][a-zA-Z0-9_\-]+
    ;
-
 
 NUMBER
    : '-'? INT ('.' [0-9] +)? EXP?
@@ -45,7 +44,7 @@ fragment EXP
 // \- since - means "range" inside [...]
 
 WS
-   : [ \t\r] + -> skip
+   : [ \t] + -> skip
    ;
 
 BREAK
@@ -54,18 +53,31 @@ BREAK
 
 EXTRA_NOT_A_NUMBER
   : '"__NaN' ('_d'|'_f') '"'
-  | '__NaN' ('_d'|'_f') ~'"'
+  | '__NaN' ('_d'|'_f')
   ;
 
 EXTRA_POSITIVE_INFINITY
   : '"__Infinity' ('_d'|'_f') '"'
-  | '__Infinity' ('_d'|'_f') ~'"'
+  | '__Infinity' ('_d'|'_f')
   ;
 
 EXTRA_NEGATIVE_INFINITY
   : '"__-Infinity' ('_d'|'_f') '"'
-  | '__-Infinity' ('_d'|'_f') ~'"'
+  | '__-Infinity' ('_d'|'_f')
   ;
+
+// Literals 'true', 'false', 'null' have to take precedence over being interpreted as unquoted strings.
+LIT_TRUE
+   : 'true'
+   ;
+
+LIT_FALSE
+   : 'false'
+   ;
+
+LIT_NULL
+   : 'null'
+   ;
 
 STRING
    : '"' (ESC | SAFECODEPOINT)* '"'
@@ -98,16 +110,4 @@ EQUALS
 
 COLON
    : ':'
-   ;
-
-LIT_TRUE
-   : 'true'
-   ;
-
-LIT_FALSE
-   : 'false'
-   ;
-
-LIT_NULL
-   : 'null'
    ;

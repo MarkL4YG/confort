@@ -60,9 +60,12 @@ public class DeserializeHOCONTest {
 
     @Test
     public void test_escaped_Strings() {
-        assertEquals("\n\n\\n", rootNode.getNode("escaped").asString());
-        assertEquals("4", rootNode.getNode("unicode").asString());
-        assertEquals("Hello\"World\"", rootNode.getNode("escaped_quote").asString());
+        assertEquals("\n\n\\n", rootNode.getNode("escaped")
+                .optString().orElseThrow(() -> new IllegalStateException("Escaped str not set to string!")));
+        assertEquals("4", rootNode.getNode("unicode")
+                .optString().orElseThrow(() -> new IllegalStateException("Escaped unicode str not set to string!")));
+        assertEquals("Hello\"World\"", rootNode.getNode("escaped_quote")
+                .optString().orElseThrow(() -> new IllegalStateException("Escaped quote not set to string.")));
     }
 
     @Test

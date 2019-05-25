@@ -6,6 +6,7 @@ import de.mlessmann.confort.LoaderFactory;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;
 import de.mlessmann.confort.lang.RegisterLoaders;
+import de.mlessmann.confort.tests.AbstractDeserializeTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,116 +20,16 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class DeserializeHOCONTest {
+public class DeserializeHOCONTest extends AbstractDeserializeTest {
 
-    private static IConfigNode rootNode;
-
-    private static InputStream getFooStream() {
-        return DeserializeHOCONTest.class.getClassLoader().getResourceAsStream("hocon/foo.hocon");
+    @Override
+    protected String getTestResource() {
+        return "hocon/foo.hocon";
     }
 
-    @BeforeClass
-    public static void setup() {
-        RegisterLoaders.registerLoaders();
-
-        try (InputStreamReader reader = new InputStreamReader(getFooStream(), Charset.forName("UTF-8"))) {
-            rootNode = LoaderFactory.getLoader("hocon").parse(reader);
-
-        } catch (IOException | ParseException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    protected String getLoaderIdentification() {
+        return "application/hocon";
     }
 
-    @Test
-    public void test_read_GeneralDataTypes() {
-        assertFalse(rootNode.getNode("foo").isVirtual());
-        assertTrue(rootNode.getNode("foo").isMap());
-        assertTrue(rootNode.getNode("foo", "bar").isList());
-        assertTrue(rootNode.getNode("foo", "tee").isPrimitive());
-    }
-
-    @Test
-    public void test_read_SpecialFloats() {
-        assertTrue(rootNode.getNode("nan").optFloat().get().isNaN());
-        assertEquals(Float.POSITIVE_INFINITY, rootNode.getNode("inf").optFloat().get(), 0.0);
-        assertEquals(Float.NEGATIVE_INFINITY, rootNode.getNode("Ninf").optFloat().get(), 0.0);
-
-        assertTrue(rootNode.getNode("nanD").optDouble().get().isNaN());
-        assertEquals(Double.POSITIVE_INFINITY, rootNode.getNode("infD").optDouble().get(), 0.0);
-        assertEquals(Double.NEGATIVE_INFINITY, rootNode.getNode("NinfD").optDouble().get(), 0.0);
-    }
-
-    @Test
-    public void test_escaped_Strings() {
-        assertEquals("\n\n\\n", rootNode.getNode("escaped")
-                .optString().orElseThrow(() -> new IllegalStateException("Escaped str not set to string!")));
-        assertEquals("4", rootNode.getNode("unicode")
-                .optString().orElseThrow(() -> new IllegalStateException("Escaped unicode str not set to string!")));
-        assertEquals("Hello\"World\"", rootNode.getNode("escaped_quote")
-                .optString().orElseThrow(() -> new IllegalStateException("Escaped quote not set to string.")));
-    }
-
-    @Test
-    public void test_write_Save() {
-        try {
-            StringWriter testWriter = new StringWriter();
-            LoaderFactory.getLoader("json").save(rootNode, testWriter);
-            String savedText = testWriter.toString();
-            savedText = savedText.replaceAll("\\s", "");
-
-            Config deserialized = ConfigFactory.parseString(savedText);
-            assertTrue(deepHOCONEquals(rootNode, deserialized));
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean deepHOCONEquals(IConfigNode confort, Object hocon) {
-        if (confort.isMap() && hocon instanceof Map) {
-            Map object = (Map) hocon;
-            Map<String, IConfigNode> confortMap = confort.asMap();
-            if (object.size() != confortMap.size()) {
-                return false;
-            }
-
-            for (Map.Entry<String, IConfigNode> entry : confortMap.entrySet()) {
-                if (object.getOrDefault(entry.getKey(), null) == null) {
-                    return false;
-                }
-
-                if (!deepHOCONEquals(entry.getValue(), object.getOrDefault(entry.getKey(), null))) {
-                    return false;
-                }
-            }
-
-        } else if (confort.isList() && hocon instanceof List) {
-            List<IConfigNode> list = confort.asList();
-            List lst = ((List) hocon);
-            if (list.size() != lst.size()) {
-                return false;
-            }
-
-            for (int i = 0; i < list.size(); i++) {
-                if (!deepHOCONEquals(list.get(i), lst.get(i))) {
-                    return false;
-                }
-            }
-
-        } else if (confort.isPrimitive()) {
-
-            if ((confort.optFloat().isPresent() && confort.optFloat().get().isNaN())
-                    || (confort.optFloat().isPresent() && confort.optFloat().get().isInfinite())
-                    || (confort.optDouble().isPresent() && confort.optDouble().get().isNaN())
-                    || (confort.optDouble().isPresent() && confort.optDouble().get().isInfinite())) {
-                return true;
-
-            } else {
-                assertEquals(confort.getValue(), hocon);
-            }
-        }
-
-        return true;
-    }
 }

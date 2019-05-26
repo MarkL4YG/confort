@@ -7,5 +7,17 @@ workflows:
       - gradle/test:
           reports_path: build/test-reports
           test_results_path: build/test-results
+          context: fng-gradle-snapshot
       - gradle/run:
           command: publish
+          filters:
+            branches:
+              only: bleeding
+          context: fng-gradle-snapshot
+      - gradle/run:
+          command: publish
+          filters:
+            branches:
+              only: /^release(-.)+$/
+          context: fng-gradle-release
+

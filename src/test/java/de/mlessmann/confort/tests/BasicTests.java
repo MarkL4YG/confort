@@ -1,4 +1,4 @@
-package de.mlessmann.confort.test;
+package de.mlessmann.confort.tests;
 
 import de.mlessmann.confort.node.ConfigNode;
 import de.mlessmann.confort.api.IConfigNode;
@@ -17,14 +17,14 @@ public class BasicTests {
     }
 
     @Test
-    public void virtualPersists() {
+    public void node_virtualPersists() {
         assertTrue(root.getNode("foo", "bar").isVirtual());
         assertTrue(root.getNode("foo", "bar", "bar").isVirtual());
         assertTrue(root.getNode("foo", "bar").isVirtual());
     }
 
     @Test
-    public void nonVirtualPersists() {
+    public void node_nonVirtualPersists() {
         assertTrue(root.getNode("foo", "tee").isVirtual());
         root.getNode("foo", "tee").defaultValue("turtle");
         assertFalse(root.getNode("foo").isVirtual());
@@ -33,7 +33,7 @@ public class BasicTests {
     }
 
     @Test
-    public void primitiveValueResets() {
+    public void node_primitiveValueResets() {
         root.getNode("tee").setString("test");
         assertEquals("test", root.getNode("tee").asString());
         root.getNode("tee").append(new ConfigNode());
@@ -41,7 +41,7 @@ public class BasicTests {
     }
 
     @Test
-    public void listValueResets() {
+    public void node_listValueResets() {
         root.getNode("tee").append(new ConfigNode());
         assertTrue(root.getNode("tee").isList());
         assertFalse(root.getNode("tee").asList().isEmpty());
@@ -51,7 +51,7 @@ public class BasicTests {
     }
 
     @Test
-    public void mapValueResets() {
+    public void node_mapValueResets() {
         root.getNode("tee").getNode("bla").setString("child");
         assertTrue(root.getNode("tee").isMap());
         assertFalse(root.getNode("tee").asMap().isEmpty());

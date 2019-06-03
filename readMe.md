@@ -26,7 +26,7 @@ Grammar for your format is not there? Don't give up! Writing ANTLR grammar is ea
 
 ## Links
 
-* Documentation: \<tbd\>
+* Documentation: https://github.com/MarkL4YG/confort/wiki
 * Issues: https://github.com/MarkL4YG/confort/issues
 * Contact:  
   * [github@m-lessmann.de](mailto:github@m-lessmann.de)  

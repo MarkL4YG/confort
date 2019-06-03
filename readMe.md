@@ -10,7 +10,8 @@ A configuration library based on nodes, trees and parsers generated from [ANTLR 
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
 | CircleCI (bleeding) | [![CircleCI](https://circleci.com/gh/MarkL4YG/confort/tree/bleeding.svg?style=svg)](https://circleci.com/gh/MarkL4YG/confort/tree/bleeding) |
 | CircleCI (release)  | <tbd>                                                                                                                                     |
-| Snyk Security Check | [![Known Vulnerabilities](https://snyk.io/test/github/markl4yg/confort/badge.svg)](https://snyk.io/test/github/markl4yg/confort)          | 
+| Snyk Security Check | [![Known Vulnerabilities](https://snyk.io/test/github/markl4yg/confort/badge.svg)](https://snyk.io/test/github/markl4yg/confort)          |  
+| Dependabot-Updates  | [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=MarkL4YG/confort)](https://dependabot.com) |  
 
 
 ## Description

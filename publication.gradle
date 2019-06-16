@@ -21,18 +21,31 @@ publishing {
         api(MavenPublication) {
             artifactId = "${project.ext.artifact}-api"
             artifact apiJar
+            artifact apiSourcesJar {
+                classifier "sources"
+            }
         }
         lang(MavenPublication) {
             artifactId = "${project.ext.artifact}-lang"
             artifact langJar
+            artifact langSourcesJar {
+                classifier "sources"
+            }
+            
         }
         runtime(MavenPublication) {
             artifactId = "${project.ext.artifact}-runtime"
             artifact runtimeJar
+            artifact runtimeSourcesJar {
+                classifier "sources"
+            }
         }
         all(MavenPublication) {
             artifactId = project.ext.artifact
             artifact allJar
+            artifact allSourcesJar {
+                classifier "sources"
+            }
         }
     }
 }

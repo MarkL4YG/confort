@@ -12,8 +12,15 @@ task apiJar(type: Jar) {
     baseName = 'confort-api'
     version = project.version
 
-    from sourceSets.api.allJava
     from sourceSets.api.output
+
+    dependsOn 'compileApiJava'
+}
+task apiSourcesJar(type: Jar) {
+    baseName = 'confort-api'
+    version = project.version
+
+    from sourceSets.api.allJava
 
     dependsOn 'compileApiJava'
 }
@@ -21,7 +28,16 @@ task apiJar(type: Jar) {
 task langJar(type: Jar) {
     baseName = 'confort-lang'
     version = project.version
+
     from sourceSets.lang.output
+
+    dependsOn 'compileLangJava'
+}
+task langSourcesJar(type: Jar) {
+    baseName = 'confort-lang'
+    version = project.version
+
+    from sourceSets.lang.allJava
 
     dependsOn 'compileLangJava'
 }
@@ -31,6 +47,14 @@ task runtimeJar(type: Jar) {
     version = project.version
 
     from sourceSets.main.output
+
+    dependsOn 'compileJava'
+}
+task runtimeSourcesJar(type: Jar) {
+    baseName = 'confort-runtime'
+    version = project.version
+
+    from sourceSets.main.allJava
 
     dependsOn 'compileJava'
 }
@@ -45,10 +69,24 @@ task allJar(type: Jar) {
 
     dependsOn 'compileLangJava'
 }
+task allSourcesJar(type: Jar) {
+    baseName = 'confort'
+    version = project.version
+
+    from sourceSets.api.allJava
+    from sourceSets.main.allJava
+    from sourceSets.lang.allJava
+
+    dependsOn 'compileLangJava'
+}
 
 build {
     dependsOn 'apiJar'
+    dependsOn 'apiSourcesJar'
     dependsOn 'langJar'
+    dependsOn 'langSourcesJar'
     dependsOn 'runtimeJar'
+    dependsOn 'runtimeSourcesJar'
     dependsOn 'allJar'
+    dependsOn 'allSourcesJar'
 }

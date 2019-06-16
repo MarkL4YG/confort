@@ -5,6 +5,8 @@ import de.mlessmann.confort.api.IConfig;
 import de.mlessmann.confort.api.lang.IConfigLoader;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -12,6 +14,8 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 public abstract class Config implements IConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(Config.class);
 
     private static final Charset INITIAL_CHARSET = Charset.forName("UTF-8");
 
@@ -25,10 +29,12 @@ public abstract class Config implements IConfig {
 
     @Override
     public synchronized void save() throws IOException {
-        if (root != null) {
+        if (root != null && !root.isVirtual()) {
             try (Writer writer = produceWriter()) {
                 loader.save(root, writer);
             }
+        } else {
+            logger.debug("Skipping write: Root is virtual.");
         }
     }
 

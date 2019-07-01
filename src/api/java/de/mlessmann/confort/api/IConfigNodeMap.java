@@ -42,6 +42,7 @@ public interface IConfigNodeMap {
 
     /**
      * Removes all nodes from the map.
+     * @implNote Please be aware of the overloading with {@link IConfigNodeList#clear()} as this will clear both types of nodes regardless of what the type is.
      */
     void clear();
 

@@ -25,14 +25,25 @@ public interface IConfigNodeMap {
     IConfigNode remove(String childName);
 
     /**
+     * Adds a new node to this mapping.
+     */
+    void put(String childName, IConfigNode child);
+
+    /**
+     * Adds a new value to this mapping. Automatically wraps the value into a node.
+     * @implNote If the value is a configuration node, this will unpack the value and build a new one.
+     */
+    void putValue(String childName, Object value);
+
+    /**
      * Removes all nodes from the mapping, the predicate returns true for.
      */
     void removeIf(BiPredicate<String, IConfigNode> removeCondition);
 
     /**
-     * Adds a new node to this mapping.
+     * Removes all nodes from the map.
      */
-    void put(String childName, IConfigNode child);
+    void clear();
 
     /**
      * Returns a {@link Map<String, IConfigNode>} representation of the internal mapping.

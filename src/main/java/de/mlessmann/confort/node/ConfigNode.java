@@ -109,9 +109,31 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     }
 
     @Override
+    public void prependValue(Object value) {
+        if (value instanceof IConfigNode) {
+            value = ((IConfigNode) value).getValue();
+        }
+
+        final ConfigNode child = new ConfigNode();
+        child.setValue(value);
+        prepend(child);
+    }
+
+    @Override
     public synchronized void append(IConfigNode child) {
         setTrackingMode(TrackingMode.LIST);
         list.add(child);
+    }
+
+    @Override
+    public void appendValue(Object value) {
+        if (value instanceof IConfigNode) {
+            value = ((IConfigNode) value).getValue();
+        }
+
+        final ConfigNode child = new ConfigNode();
+        child.setValue(value);
+        append(child);
     }
 
     @Override
@@ -128,6 +150,17 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
         }
 
         setTrackingMode(TrackingMode.MAP);
+    }
+
+    @Override
+    public void putValue(String childName, Object value) {
+        if (value instanceof IConfigNode) {
+            value = ((IConfigNode) value).getValue();
+        }
+
+        final ConfigNode child = new ConfigNode();
+        child.setValue(value);
+        put(childName, child);
     }
 
     @Override
@@ -248,6 +281,12 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
                 .map(ConfigNode.class::cast)
                 .forEach(ConfigNode::detachParent);
         map.clear();
+    }
+
+    @Override
+    public synchronized void clear() {
+        clearMap();
+        setTrackingMode(TrackingMode.EXPLICIT_MAP);
     }
 
     @Override

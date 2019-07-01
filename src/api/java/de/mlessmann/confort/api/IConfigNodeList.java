@@ -16,9 +16,19 @@ public interface IConfigNodeList {
     void append(IConfigNode child);
 
     /**
+     * Append a value to this list. Automatically wraps the value into a node.
+     */
+    void appendValue(Object value);
+
+    /**
      * Prepend a node to this list.
      */
     void prepend(IConfigNode child);
+
+    /**
+     * Prepend a value to this list. Automatically wraps the value into a node.
+     */
+    void prependValue(Object value);
 
     /**
      * Remove a node based on its index.
@@ -29,6 +39,11 @@ public interface IConfigNodeList {
      * Removes all nodes from the list, the predicate returns true for.
      */
     void removeIf(Predicate<IConfigNode> removeCondition);
+
+    /**
+     * Removes all nodes from the list.
+     */
+    void clear();
 
     /**
      * Returns a {@link List<IConfigNode>} representation of the internal list.

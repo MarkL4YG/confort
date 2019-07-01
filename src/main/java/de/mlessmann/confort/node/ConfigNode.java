@@ -286,7 +286,13 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public synchronized void clear() {
         clearMap();
-        setTrackingMode(TrackingMode.EXPLICIT_MAP);
+        clearList();
+
+        if (trackingMode == TrackingMode.LIST) {
+            setTrackingMode(TrackingMode.EXPLICIT_LIST);
+        } else if (trackingMode == TrackingMode.MAP) {
+            setTrackingMode(TrackingMode.EXPLICIT_MAP);
+        }
     }
 
     @Override

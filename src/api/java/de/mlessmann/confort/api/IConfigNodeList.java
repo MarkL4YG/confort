@@ -52,4 +52,17 @@ public interface IConfigNodeList {
      * @implNote the list is unmodifiable!
      */
     List<IConfigNode> asList();
+
+
+    /**
+     * Returns a list just as {@link #asList()} but retrieves the values of the {@link IValueHolder}s contained in the usual list.
+     * @throws de.mlessmann.confort.api.except.TypeMismatchException if any stored value is incompatible to the given type or the node is not a list.
+     */
+    <T> List<T> asValueList(Class<T> type);
+
+    /**
+     * Weaker version of {@link #asValueList(Class)} where any incompatible value is simply skipped.
+     * Also returns an empty list for virtual and completely incompatible nodes.
+     */
+    <T> List<T> optValueList(Class<T> type);
 }

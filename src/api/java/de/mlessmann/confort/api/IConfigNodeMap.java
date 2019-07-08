@@ -51,4 +51,16 @@ public interface IConfigNodeMap {
      * @implNote the mapping is unmodifiable!
      */
     Map<String, IConfigNode> asMap();
+
+    /**
+     * Returns a map just as {@link #asMap()} but retrieves the values of the {@link IValueHolder}s contained in the usual Map.
+     * @throws de.mlessmann.confort.api.except.TypeMismatchException if any stored value is incompatible to the given type or the node is not a map.
+     */
+    <T> Map<String, T> asValueMap(Class<T> type);
+
+    /**
+     * Weaker version of {@link #asValueMap(Class)} where any incompatible value is simply skipped.
+     * Also returns an empty Map for virtual and completely incompatible nodes.
+     */
+    <T> Map<String, T> optValueMap(Class<T> type);
 }

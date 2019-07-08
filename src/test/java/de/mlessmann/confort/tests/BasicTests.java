@@ -1,9 +1,12 @@
 package de.mlessmann.confort.tests;
 
+import de.mlessmann.confort.api.except.TypeMismatchException;
 import de.mlessmann.confort.node.ConfigNode;
 import de.mlessmann.confort.api.IConfigNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -58,5 +61,63 @@ public class BasicTests {
         root.getNode("tee").setString("reset");
         assertFalse(root.getNode("tee").isMap());
         assertTrue(root.getNode("tee").asMap().isEmpty());
+    }
+
+    @Test
+    public void node_asValueList() {
+        root.getNode("tee").appendValue("a");
+        root.getNode("tee").appendValue("b");
+        root.getNode("tee").appendValue("c");
+        root.getNode("tee").appendValue("d");
+        root.getNode("tee").appendValue("e");
+        root.getNode("tee").appendValue("f");
+        assertTrue(root.getNode("tee").asValueList(String.class)
+                .stream()
+                .map(Object::getClass)
+                .allMatch(String.class::equals));
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void node_asValueList_throws() {
+        root.getNode("tee").appendValue("a");
+        root.getNode("tee").appendValue("b");
+        root.getNode("tee").appendValue("c");
+        root.getNode("tee").appendValue("d");
+        root.getNode("tee").appendValue("e");
+        root.getNode("tee").appendValue("f");
+        assertTrue(root.getNode("tee").asValueList(Integer.class)
+                .stream()
+                .map(Object::getClass)
+                .allMatch(String.class::equals));
+    }
+
+    @Test
+    public void node_asValueMap() {
+        root.getNode("tee", "a").setString("a");
+        root.getNode("tee", "b").setString("a");
+        root.getNode("tee", "c").setString("a");
+        root.getNode("tee", "d").setString("a");
+        root.getNode("tee", "e").setString("a");
+        root.getNode("tee", "f").setString("a");
+        assertTrue(root.getNode("tee").asValueMap(String.class)
+                .values()
+                .stream()
+                .map(Object::getClass)
+                .allMatch(String.class::equals));
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void node_asValueMap_throws() {
+        root.getNode("tee", "a").setString("a");
+        root.getNode("tee", "b").setString("a");
+        root.getNode("tee", "c").setString("a");
+        root.getNode("tee", "d").setString("a");
+        root.getNode("tee", "e").setString("a");
+        root.getNode("tee", "f").setString("a");
+        assertTrue(root.getNode("tee").asValueMap(Integer.class)
+                .values()
+                .stream()
+                .map(Object::getClass)
+                .allMatch(String.class::equals));
     }
 }

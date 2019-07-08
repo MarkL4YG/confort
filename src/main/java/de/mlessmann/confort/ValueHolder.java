@@ -1,6 +1,7 @@
 package de.mlessmann.confort;
 
 import de.mlessmann.confort.api.IValueHolder;
+import de.mlessmann.confort.api.except.TypeMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

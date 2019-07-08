@@ -2,6 +2,7 @@ package de.mlessmann.confort.node;
 
 import de.mlessmann.confort.ValueHolder;
 import de.mlessmann.confort.api.IConfigNode;
+import de.mlessmann.confort.api.except.TypeMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,6 +89,34 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     }
 
     @Override
+    public <T> List<T> asValueList(Class<T> type) {
+        List<T> results = new LinkedList<>();
+        optList().orElseThrow(() -> new TypeMismatchException("Node is not a list!"))
+                .stream()
+                    .map(node -> node.getValue(type))
+                    .forEach(value -> {
+                        if (value == null) {
+                            throw new TypeMismatchException("Incompatible type! Wanted: " + type.getName());
+                        }
+                        results.add(value);
+                    });
+
+        return Collections.unmodifiableList(results);
+    }
+
+    @Override
+    public <T> List<T> optValueList(Class<T> type) {
+        List<T> results = new LinkedList<>();
+        optList().ifPresent(list -> {
+            list.stream()
+                    .map(node -> node.getValue(type))
+                    .filter(Objects::nonNull)
+                    .forEach(results::add);
+        });
+        return Collections.unmodifiableList(results);
+    }
+
+    @Override
     public synchronized IConfigNode remove(Integer index) {
         return list.remove(0);
     }
@@ -139,6 +168,34 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public synchronized Map<String, IConfigNode> asMap() {
         return Collections.unmodifiableMap(map);
+    }
+
+    @Override
+    public <T> Map<String, T> asValueMap(Class<T> type) {
+        Map<String, T> resultMap = new LinkedHashMap<>();
+        optMap().orElseThrow(() -> new TypeMismatchException("Node is not a map!"))
+                .forEach((k, v) -> {
+                    final T castValue = v.getValue(type);
+                    if (castValue == null) {
+                        throw new TypeMismatchException("Incompatible value encountered. Wanted: " + type.getName());
+                    }
+                    resultMap.put(k, castValue);
+                });
+        return Collections.unmodifiableMap(resultMap);
+    }
+
+    @Override
+    public <T> Map<String, T> optValueMap(Class<T> type) {
+        Map<String, T> resultMap = new LinkedHashMap<>();
+        optMap().ifPresent(map -> {
+                map.forEach((k, v) -> {
+                final T castValue = v.getValue(type);
+                if (castValue != null) {
+                    resultMap.put(k, castValue);
+                }
+            });
+        });
+        return Collections.unmodifiableMap(resultMap);
     }
 
     @Override

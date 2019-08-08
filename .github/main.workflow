@@ -8,3 +8,13 @@ action "GitHub Action for Slack" {
   secrets = ["SLACK_WEBHOOK", "GITHUB_TOKEN"]
   args = "A new pull request has been pushed to MarkL4YG/confort"
 }
+
+workflow "Pull Request CI" {
+  on = "pull_request"
+  resolves = ["MrRamych/gradle-actions/openjdk-11@2.1"]
+}
+
+action "MrRamych/gradle-actions/openjdk-11@2.1" {
+  uses = "MrRamych/gradle-actions/openjdk-11@2.1"
+  args = "test assemble"
+}

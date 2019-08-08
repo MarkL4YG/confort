@@ -11,10 +11,10 @@ action "GitHub Action for Slack" {
 
 workflow "Pull Request CI" {
   on = "pull_request"
-  resolves = ["MrRamych/gradle-actions/openjdk-11@2.1"]
+  resolves = ["Gradle Test & Assemble"]
 }
 
-action "MrRamych/gradle-actions/openjdk-11@2.1" {
+action "Gradle Test & Assemble" {
   uses = "MrRamych/gradle-actions/openjdk-11@2.1"
   args = "test assemble"
 }

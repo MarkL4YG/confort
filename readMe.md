@@ -6,7 +6,8 @@ A configuration library based on nodes, trees and parsers generated from [ANTLR 
 
 ## Badges
 
-| License             | ![GitHub](https://img.shields.io/github/license/markl4yg/confort.svg)                                                                     |
+| License             | ![GitHub](https://img.shields.io/github/license/markl4yg/confort.svg) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMarkL4YG%2Fconfort.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMarkL4YG%2Fconfort?ref=badge_shield)
+                                                                    |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
 | CircleCI (bleeding) | [![CircleCI](https://circleci.com/gh/MarkL4YG/confort/tree/bleeding.svg?style=svg)](https://circleci.com/gh/MarkL4YG/confort/tree/bleeding) |
 | CircleCI (release)  | <tbd>                                                                                                                                     |
@@ -39,3 +40,7 @@ Grammar for your format is not there? Don't give up! Writing ANTLR grammar is ea
 If you would like to thank me for my work, please consider donating a drink :)  
 
 [![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/F1F0OL0V)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMarkL4YG%2Fconfort.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMarkL4YG%2Fconfort?ref=badge_large)

@@ -5,7 +5,7 @@
 A configuration library based on nodes, trees and parsers generated from [ANTLR Grammars](https://www.antlr.org/).  
 
 ## Badges
-|---------------------|----------|  
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------|  
 | BuddyCI (bleeding) | [![buddy pipeline](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194465/badge.svg?token=22548d502f11240ea437ccc14a4348c352915b0cf82518920be9d2c98bdcb9dd "buddy pipeline")](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194465) |  
 | BuddyCI (pre-release)  | [![buddy pipeline](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194480/badge.svg?token=22548d502f11240ea437ccc14a4348c352915b0cf82518920be9d2c98bdcb9dd "buddy pipeline")](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194480) |  
 | Snyk Security Check | [![Known Vulnerabilities](https://snyk.io/test/github/markl4yg/confort/badge.svg)](https://snyk.io/test/github/markl4yg/confort) |  

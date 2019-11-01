@@ -67,7 +67,7 @@ dependencies {
     antlr group: 'org.antlr', name: 'antlr4', version: project.ext.antlrVersion
 
     compile sourceSets.api.output
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.27'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.29'
     
     langCompile sourceSets.api.output
     langCompile sourceSets.main.output

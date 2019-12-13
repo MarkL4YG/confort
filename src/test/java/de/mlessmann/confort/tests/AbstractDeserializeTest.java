@@ -27,7 +27,9 @@ public abstract class AbstractDeserializeTest extends AbstractConfigTest {
 
     @Test
     public void deserialize_SpecialFloats() {
-        assertTrue(rootNode.getNode("nan").optFloat().get().isNaN());
+        assertTrue(rootNode.getNode("nan").optFloat()
+                .orElseThrow(() -> new IllegalStateException("NaN-Node is not NaN!"))
+                .isNaN());
         assertEquals(Float.POSITIVE_INFINITY, rootNode.getNode("inf").optFloat().get(), 0.0);
         assertEquals(Float.NEGATIVE_INFINITY, rootNode.getNode("Ninf").optFloat().get(), 0.0);
 

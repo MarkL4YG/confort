@@ -1,16 +1,12 @@
-package de.mlessmann.confort.api.except;
+package de.mlessmann.confort.lang;
 
-/**
- * There was an error while trying to parse input.
- */
-public class ParseException extends Exception {
-
+public class RuntimeParseException extends RuntimeException {
     private final int linePosition;
     private final int columnPosition;
     private final String sourceLocation;
     private final String englishMessage;
 
-    public ParseException(int linePosition, int columnPosition, String sourceLocation, String englishMessage) {
+    public RuntimeParseException(int linePosition, int columnPosition, String sourceLocation, String englishMessage) {
         super();
         this.linePosition = linePosition;
         this.columnPosition = columnPosition;
@@ -18,7 +14,7 @@ public class ParseException extends Exception {
         this.englishMessage = englishMessage;
     }
 
-    public ParseException(int linePosition, int columnPosition, String sourceLocation, String englishMessage, Throwable throwable) {
+    public RuntimeParseException(int linePosition, int columnPosition, String sourceLocation, String englishMessage, Throwable throwable) {
         super(throwable);
         this.linePosition = linePosition;
         this.columnPosition = columnPosition;
@@ -33,7 +29,7 @@ public class ParseException extends Exception {
 
     @Override
     public String getLocalizedMessage() {
-        return getMessage();
+        return super.getMessage();
     }
 
     public int getLinePosition() {

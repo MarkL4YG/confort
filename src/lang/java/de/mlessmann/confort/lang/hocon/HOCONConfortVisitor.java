@@ -3,12 +3,12 @@ package de.mlessmann.confort.lang.hocon;
 import de.mlessmann.confort.antlr.HOCONParser;
 import de.mlessmann.confort.antlr.HOCONParserBaseVisitor;
 import de.mlessmann.confort.api.IConfigNode;
-import de.mlessmann.confort.lang.ParseVisitException;
-import de.mlessmann.confort.lang.UnmatchedContextException;
+import de.mlessmann.confort.lang.RuntimeParseException;
 import de.mlessmann.confort.lang.codepoint.EscapeMachine;
-import de.mlessmann.confort.lang.except.FileFormatException;
+import de.mlessmann.confort.lang.codepoint.LiteralUtils;
 import de.mlessmann.confort.lang.json.JSONEscapeMachine;
 import de.mlessmann.confort.node.ConfigNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -31,7 +31,7 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
             return this.visitHocon(((HOCONParser.HoconContext) tree));
         }
 
-        return throwUnmatched(tree);
+        throw new IllegalArgumentException("ParseTree for visit is not a HOCON parse tree!");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
                 return node;
 
             } else if (ctx.NUMBER() != null) {
-                return parseNumber(ctx.NUMBER(), node);
+                return LiteralUtils.parseNumber(ctx.NUMBER(), node);
 
             } else if (ctx.EXTRA_NOT_A_NUMBER() != null) {
                 return parseExtraNaN(ctx.EXTRA_NOT_A_NUMBER().getText(), node);
@@ -81,7 +81,7 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
                 return parseString(ctx.STRING(), node);
             }
         } catch (NumberFormatException e) {
-            throw new FileFormatException(
+            throw new RuntimeParseException(
                     ctx.getStart().getLine(),
                     ctx.getStart().getCharPositionInLine(),
                     ctx.getStart().getTokenSource().getSourceName(),
@@ -116,20 +116,6 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
         return node;
     }
 
-    private IConfigNode parseNumber(TerminalNode numberTerminalNode, IConfigNode node) {
-        String text = numberTerminalNode.getText();
-
-        if (text.contains(".")) {
-            Double value = Double.parseDouble(text);
-            node.setDouble(value);
-        } else {
-            Integer value = Integer.parseInt(text);
-            node.setInteger(value);
-        }
-
-        return node;
-    }
-
     private IConfigNode parseString(TerminalNode ctx, IConfigNode node) {
         String str = unquoteString(ctx.getText());
         str = escapeMachine.unescape(str);
@@ -150,7 +136,7 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
         IConfigNode node = new ConfigNode();
 
         if (ctx.pair() == null) {
-            throw new FileFormatException(
+            throw new RuntimeParseException(
                     ctx.getStart().getLine(),
                     ctx.getStart().getCharPositionInLine(),
                     ctx.getStart().getTokenSource().getSourceName(),
@@ -161,7 +147,7 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
         ctx.pair().forEach(pair -> {
             TerminalNode stringNode = pair.STRING();
             if (stringNode == null) {
-                throw new FileFormatException(
+                throw new RuntimeParseException(
                         pair.getStart().getLine(),
                         pair.getStart().getCharPositionInLine(),
                         pair.getStart().getTokenSource().getSourceName(),
@@ -180,7 +166,7 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
     @Override
     public IConfigNode visitArray(HOCONParser.ArrayContext ctx) {
         if (ctx.value() == null) {
-            throw new FileFormatException(
+            throw new RuntimeParseException(
                     ctx.getStart().getLine(),
                     ctx.getStart().getCharPositionInLine(),
                     ctx.getStart().getTokenSource().getSourceName(),
@@ -196,10 +182,13 @@ public class HOCONConfortVisitor extends HOCONParserBaseVisitor<IConfigNode> {
         return node;
     }
 
-    private IConfigNode throwUnmatched(ParseTree tree) throws ParseVisitException {
-        String message = String.format("Unmatched element! %s", tree.getClass().getSimpleName());
-        UnmatchedContextException ex = new UnmatchedContextException(message);
-        ex.setContext(tree);
-        throw ex;
+    private IConfigNode throwUnmatched(ParserRuleContext tree) {
+        String message = String.format("Unmatched element \"%s\"", tree.getClass().getSimpleName());
+        throw new RuntimeParseException(
+                tree.getStart().getLine(),
+                tree.getStart().getCharPositionInLine(),
+                tree.getStart().getTokenSource().getSourceName(),
+                message
+        );
     }
 }

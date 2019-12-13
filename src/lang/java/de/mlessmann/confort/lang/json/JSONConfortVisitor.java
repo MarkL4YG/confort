@@ -1,6 +1,7 @@
 package de.mlessmann.confort.lang.json;
 
 import de.mlessmann.confort.lang.codepoint.EscapeMachine;
+import de.mlessmann.confort.lang.except.FileFormatException;
 import de.mlessmann.confort.node.ConfigNode;
 import de.mlessmann.confort.antlr.JSONParser;
 import de.mlessmann.confort.antlr.JSONParserBaseVisitor;
@@ -41,32 +42,41 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
         }
 
         IConfigNode node = new ConfigNode();
+        try {
+            if (ctx.LIT_FALSE() != null) {
+                node.setBoolean(false);
+                return node;
 
-        if (ctx.LIT_FALSE() != null) {
-            node.setBoolean(false);
-            return node;
+            } else if (ctx.LIT_TRUE() != null) {
+                node.setBoolean(true);
+                return node;
 
-        } else if (ctx.LIT_TRUE() != null) {
-            node.setBoolean(true);
-            return node;
+            } else if (ctx.LIT_NULL() != null) {
+                return node;
 
-        } else if (ctx.LIT_NULL() != null) {
-            return node;
+            } else if (ctx.NUMBER() != null) {
+                return parseNumber(ctx.NUMBER(), node);
 
-        } else if (ctx.NUMBER() != null) {
-            return parseNumber(ctx.NUMBER(), node);
+            } else if (ctx.EXTRA_NOT_A_NUMBER() != null) {
+                return parseExtraNaN(ctx.EXTRA_NOT_A_NUMBER().getText(), node);
 
-        } else if (ctx.EXTRA_NOT_A_NUMBER() != null) {
-            return parseExtraNaN(ctx.EXTRA_NOT_A_NUMBER().getText(), node);
+            } else if (ctx.EXTRA_POSITIVE_INFINITY() != null) {
+                return parseExtraInfinity(false, ctx.EXTRA_POSITIVE_INFINITY().getText(), node);
 
-        } else if (ctx.EXTRA_POSITIVE_INFINITY() != null) {
-            return parseExtraInfinity(false, ctx.EXTRA_POSITIVE_INFINITY().getText(), node);
+            } else if (ctx.EXTRA_NEGATIVE_INFINITY() != null) {
+                return parseExtraInfinity(true, ctx.EXTRA_NEGATIVE_INFINITY().getText(), node);
 
-        } else if (ctx.EXTRA_NEGATIVE_INFINITY() != null) {
-            return parseExtraInfinity(true, ctx.EXTRA_NEGATIVE_INFINITY().getText(), node);
-
-        } else if (ctx.STRING() != null) {
-            return parseString(ctx.STRING(), node);
+            } else if (ctx.STRING() != null) {
+                return parseString(ctx.STRING(), node);
+            }
+        } catch (NumberFormatException e) {
+            throw new FileFormatException(
+                    ctx.getStart().getLine(),
+                    ctx.getStart().getCharPositionInLine(),
+                    ctx.getStart().getTokenSource().getSourceName(),
+                    e.getMessage(),
+                    e
+            );
         }
 
         return throwUnmatched(ctx);
@@ -78,7 +88,7 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
         } else if (str.endsWith("_d\"")) {
             node.setDouble(Double.NaN);
         } else {
-            throw new ParseVisitException("Could not determine number type for NaN value: " + str);
+            throw new NumberFormatException("Could not determine number type for NaN value: " + str);
         }
 
         return node;
@@ -90,7 +100,7 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
         } else if (str.endsWith("_d\"")) {
             node.setDouble(negative ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
         } else {
-            throw new ParseVisitException("Could not determine number type for Infinity value: " + str);
+            throw new NumberFormatException("Could not determine number type for Infinity value: " + str);
         }
         return node;
     }
@@ -98,16 +108,12 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
     public IConfigNode parseNumber(TerminalNode numberTerminalNode, IConfigNode node) {
         String text = numberTerminalNode.getText();
 
-        try {
-            if (text.contains(".")) {
-                Double value = Double.parseDouble(text);
-                node.setDouble(value);
-            } else {
-                Integer value = Integer.parseInt(text);
-                node.setInteger(value);
-            }
-        } catch (NumberFormatException e) {
-            throw new ParseVisitException("Failed to parse numeric value!", e);
+        if (text.contains(".")) {
+            Double value = Double.parseDouble(text);
+            node.setDouble(value);
+        } else {
+            Integer value = Integer.parseInt(text);
+            node.setInteger(value);
         }
 
         return node;
@@ -132,8 +138,27 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
     public IConfigNode visitObj(JSONParser.ObjContext ctx) {
         IConfigNode node = new ConfigNode();
 
+        if (ctx.pair() == null) {
+            throw new FileFormatException(
+                    ctx.getStart().getLine(),
+                    ctx.getStart().getCharPositionInLine(),
+                    ctx.getStart().getTokenSource().getSourceName(),
+                    "Object context is not a pair!"
+            );
+        }
+
         ctx.pair().forEach(pair -> {
-            String key = unquoteString(pair.STRING().getText());
+            TerminalNode stringNode = pair.STRING();
+            if (stringNode == null) {
+                throw new FileFormatException(
+                        pair.getStart().getLine(),
+                        pair.getStart().getCharPositionInLine(),
+                        pair.getStart().getTokenSource().getSourceName(),
+                        "Missing string key for object context!"
+                );
+            }
+
+            String key = unquoteString(stringNode.getText());
             node.put(key, visitValue(pair.value()));
         });
 
@@ -142,8 +167,16 @@ public class JSONConfortVisitor extends JSONParserBaseVisitor<IConfigNode> {
 
     @Override
     public IConfigNode visitArray(JSONParser.ArrayContext ctx) {
-        IConfigNode node = new ConfigNode();
+        if (ctx.value() == null) {
+            throw new FileFormatException(
+                    ctx.getStart().getLine(),
+                    ctx.getStart().getCharPositionInLine(),
+                    ctx.getStart().getTokenSource().getSourceName(),
+                    "Array node does not contain a values!"
+            );
+        }
 
+        IConfigNode node = new ConfigNode();
         ctx.value().stream()
                 .map(this::visitValue)
                 .forEach(node::append);

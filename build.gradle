@@ -5,24 +5,24 @@ plugins {
 }
 
 group 'de.mlessmann'
-def projectVersion = '1.0.0'
+version '1.1.0'
 
 if (project.hasProperty("preRelease")) {
     apply from: './pre-release.gradle'
     def tag = project.ext.getPreReleaseTag()
     def i = tag.substring(tag.lastIndexOf('.') + 1)
 
-    projectVersion += "-rc." + i
+    version "$version-rc.$i"
 
 
 } else if (!project.hasProperty('release')) {
-    projectVersion += '-SNAPSHOT'
+    version "$version-SNAPSHOT"
 }
 
-println "Using project version: $projectVersion"
-version projectVersion
+println "Using project version: $version"
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 /// === Configuration === ///
 project.ext {

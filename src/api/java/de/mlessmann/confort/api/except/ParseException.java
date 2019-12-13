@@ -28,7 +28,7 @@ public class ParseException extends Exception {
 
     @Override
     public String getMessage() {
-        return String.format("%s (At %s -> %s:%s)", englishMessage, sourceLocation, linePosition, columnPosition);
+        return String.format("%s (At \"%s\"[%s:%s])", englishMessage, sourceLocation, linePosition, columnPosition);
     }
 
     @Override

@@ -8,6 +8,7 @@ import de.mlessmann.confort.lang.RegisterLoaders;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.charset.Charset;
 
 public abstract class AbstractConfigTest {
@@ -23,7 +24,8 @@ public abstract class AbstractConfigTest {
         RegisterLoaders.registerLoaders();
 
         try (InputStreamReader reader = new InputStreamReader(getFooStream(), Charset.forName("UTF-8"))) {
-            return LoaderFactory.getLoader(getLoaderIdentification()).parse(reader);
+            return LoaderFactory.getLoader(getLoaderIdentification())
+                    .parse(reader, URI.create("resource://" + getTestResource()));
 
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);

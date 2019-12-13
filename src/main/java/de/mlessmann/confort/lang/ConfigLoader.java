@@ -12,7 +12,7 @@ public abstract class ConfigLoader implements IConfigLoader {
 
     public IConfigNode parse(File configFile) throws IOException, ParseException {
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream(configFile))) {
-            IConfigNode root = parse(reader);
+            IConfigNode root = parse(reader, configFile.toURI());
 
             // If the parse result is NULL, we look at an empty configuration.
             // Otherwise a ParseException would've been thrown.

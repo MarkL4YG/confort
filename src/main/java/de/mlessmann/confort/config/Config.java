@@ -41,7 +41,7 @@ public abstract class Config implements IConfig {
     @Override
     public synchronized void load() throws IOException, ParseException {
         try (Reader reader = produceReader()) {
-            root = loader.parse(reader);
+            root = loader.parse(reader, getSourceURI());
         }
     }
 

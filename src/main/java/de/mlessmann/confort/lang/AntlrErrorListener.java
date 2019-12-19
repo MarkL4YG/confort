@@ -1,11 +1,9 @@
 package de.mlessmann.confort.lang;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.Interval;
-
-import java.util.BitSet;
+import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.DiagnosticErrorListener;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 
 /**
  * @implNote Bits of code taken from {@link DiagnosticErrorListener}.

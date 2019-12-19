@@ -1,5 +1,7 @@
 package de.mlessmann.confort.tests.json;
 
+import de.mlessmann.confort.api.lang.IConfigLoader;
+import de.mlessmann.confort.lang.json.JSONConfigLoader;
 import de.mlessmann.confort.tests.AbstractDeserializeTest;
 
 public class DeserializeJSONTest extends AbstractDeserializeTest {
@@ -10,7 +12,7 @@ public class DeserializeJSONTest extends AbstractDeserializeTest {
     }
 
     @Override
-    protected String getLoaderIdentification() {
-        return "application/json";
+    protected IConfigLoader getLoader() {
+        return new JSONConfigLoader();
     }
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class BasicTests {
+public class BasicNodeTests {
 
     private static IConfigNode root;
 

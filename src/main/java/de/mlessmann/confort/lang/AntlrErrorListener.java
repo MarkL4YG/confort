@@ -1,9 +1,6 @@
 package de.mlessmann.confort.lang;
 
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.DiagnosticErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 
 /**
  * @implNote Bits of code taken from {@link DiagnosticErrorListener}.
@@ -12,19 +9,42 @@ public class AntlrErrorListener extends DiagnosticErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        String expectedTokens = e.getExpectedTokens().toString(recognizer.getVocabulary());
-        String offendingPart;
+        String expectedTokens = null;
+        if (e != null) {
+            expectedTokens = e.getExpectedTokens().toString(recognizer.getVocabulary());
+        }
+        Token offendingToken = null;
         if (offendingSymbol instanceof CommonToken) {
-            offendingPart = ((CommonToken) offendingSymbol).getText();
+            offendingToken = ((Token) offendingSymbol);
+        } else if (e != null) {
+            offendingToken = e.getOffendingToken();
+        }
+
+        String offendingPart;
+        String sourceName;
+        if (offendingToken != null) {
+            offendingPart = offendingToken.getText();
+            sourceName = offendingToken.getTokenSource().getSourceName();
         } else {
             offendingPart = offendingSymbol != null ? offendingSymbol.toString() : "<null>";
+            sourceName = "<unknown>";
+        }
+
+        String message;
+        if (expectedTokens != null) {
+            message = String.format("Syntax error! Got \"%s\" expected: %s (ParserMsg: %s)",
+                    offendingPart,
+                    expectedTokens,
+                    msg);
+        } else {
+            message = String.format("Syntax error! Got \"%s\" (ParserMsg: %s)", offendingPart, msg);
         }
 
         throw new RuntimeParseException(
                 line,
                 charPositionInLine,
-                e.getOffendingToken().getTokenSource().getSourceName(),
-                String.format("Syntax error! Got \"%s\" expected: %s", offendingPart, expectedTokens),
+                sourceName,
+                message,
                 e
         );
     }

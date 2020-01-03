@@ -5,6 +5,7 @@ import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;
 
 import java.io.*;
+import java.net.URI;
 
 /**
  * Responsible for running its dedicated parsing algorithm over the input.
@@ -13,14 +14,14 @@ public interface IConfigLoader {
 
     /**
      * Convenience method for the most common case.
-     * @see #parse(Reader)
+     * @see #parse(Reader, URI)
      */
     IConfigNode parse(File file) throws IOException, ParseException;
 
     /**
      * @see IConfig#load()
      */
-    IConfigNode parse(Reader reader) throws IOException, ParseException;
+    IConfigNode parse(Reader reader, URI sourceLocator) throws IOException, ParseException;
 
     /**
      * Convenience method for the most common case.

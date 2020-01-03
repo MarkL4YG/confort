@@ -10,18 +10,22 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URI;
 
 public abstract class AntlrConfigLoader<L extends Lexer, P extends Parser> extends ConfigLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(AntlrConfigLoader.class);
 
-    public IConfigNode parse(Reader input) throws IOException, ParseException {
-        CharStream charStream = CharStreams.fromReader(input);
+    public IConfigNode parse(Reader input, URI sourceUri) throws IOException, ParseException {
+        String sourceLocator = sourceUri != null ? sourceUri.toString() : IntStream.UNKNOWN_SOURCE_NAME;
+        CharStream charStream = CharStreams.fromReader(input, sourceLocator);
 
         L lexer = produceLexer(charStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         P parser = produceParser(tokens);
+        parser.getErrorListeners().forEach(parser::removeErrorListener);
+        parser.addErrorListener(new AntlrErrorListener());
 
         // Use 2-stage parsing for expression performance
         // https://github.com/antlr/antlr4/blob/master/doc/faq/general.md#why-is-my-expression-parser-slow
@@ -39,8 +43,14 @@ public abstract class AntlrConfigLoader<L extends Lexer, P extends Parser> exten
 
             try {
                 return traverse(parse(parser));
-            } catch (ParseVisitException e) {
-                throw new ParseException(e);
+            } catch (RuntimeParseException e) {
+                throw new ParseException(
+                        e.getLinePosition(),
+                        e.getColumnPosition(),
+                        e.getSourceLocation(),
+                        e.getEnglishMessage(),
+                        e
+                );
             }
             // if we parse ok, it's LL not SLL
         }

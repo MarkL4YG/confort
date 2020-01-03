@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URI;
 
 public class FileConfig extends Config {
 
@@ -45,5 +46,10 @@ public class FileConfig extends Config {
             createRoot();
             save();
         }
+    }
+
+    @Override
+    public URI getSourceURI() {
+        return file.toURI();
     }
 }

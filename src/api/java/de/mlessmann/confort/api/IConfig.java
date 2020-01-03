@@ -3,6 +3,7 @@ package de.mlessmann.confort.api;
 import de.mlessmann.confort.api.except.ParseException;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.Charset;
 
 /**
@@ -47,4 +48,11 @@ public interface IConfig {
      * Returns the currently stored configuration root.
      */
     IConfigNode getRoot();
+
+    /**
+     * {@link URI} that identifies where the config comes from.
+     * @apiNote This is only to be used to provide the administrator with more information on errors.
+     * @implNote This may return {@code null}. It is <em>highly recommended</em> to provide a valid URI, though.
+     */
+    URI getSourceURI();
 }

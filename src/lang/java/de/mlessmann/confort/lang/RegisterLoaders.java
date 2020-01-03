@@ -12,10 +12,6 @@ public class RegisterLoaders {
                     JSONConfigLoader.class,
                     JSONConfigLoader::new
             );
-            LoaderFactory.registerLoader(
-                    HOCONConfigLoader.class,
-                    HOCONConfigLoader::new
-            );
         }
     }
 }

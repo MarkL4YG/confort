@@ -32,12 +32,12 @@ public class AntlrErrorListener extends DiagnosticErrorListener {
 
         String message;
         if (expectedTokens != null) {
-            message = String.format("Syntax error! Got \"%s\" expected: %s (ParserMsg: %s)",
+            message = String.format("Syntax error at token \"%s\", expected: \"%s\"! (ParserMsg: %s)",
                     offendingPart,
                     expectedTokens,
                     msg);
         } else {
-            message = String.format("Syntax error! Got \"%s\" (ParserMsg: %s)", offendingPart, msg);
+            message = String.format("Syntax error at token \"%s\"! (ParserMsg: %s)", offendingPart, msg);
         }
 
         throw new RuntimeParseException(

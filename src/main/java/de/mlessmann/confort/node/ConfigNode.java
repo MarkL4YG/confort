@@ -93,27 +93,33 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
         List<T> results = new LinkedList<>();
         optList().orElseThrow(() -> new TypeMismatchException("Node is not a list!"))
                 .stream()
-                    .map(node -> node.getValue(type))
-                    .forEach(value -> {
-                        if (value == null) {
-                            throw new TypeMismatchException("Incompatible type! Wanted: " + type.getName());
-                        }
-                        results.add(value);
-                    });
+                .map(node -> node.getValue(type))
+                .forEach(value -> {
+                    if (value == null) {
+                        throw new TypeMismatchException("Incompatible type! Wanted: " + type.getName());
+                    }
+                    results.add(value);
+                });
 
         return Collections.unmodifiableList(results);
     }
 
     @Override
-    public <T> List<T> optValueList(Class<T> type) {
+    public <T> List<T> optValueList(Class<T> type, boolean ignoreCompatibility) {
         List<T> results = new LinkedList<>();
-        optList().ifPresent(list -> {
-            list.stream()
-                    .map(node -> node.getValue(type))
-                    .filter(Objects::nonNull)
-                    .forEach(results::add);
-        });
+        optList().ifPresent(
+                list ->
+                        list.stream()
+                                .map(node -> node.getValue(type))
+                                .filter(node -> ignoreCompatibility || node != null)
+                                .forEach(results::add)
+        );
         return Collections.unmodifiableList(results);
+    }
+
+    @Override
+    public <T> List<T> optValueList(Class<T> type) {
+        return optValueList(type, false);
     }
 
     @Override
@@ -188,7 +194,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     public <T> Map<String, T> optValueMap(Class<T> type) {
         Map<String, T> resultMap = new LinkedHashMap<>();
         optMap().ifPresent(map -> {
-                map.forEach((k, v) -> {
+            map.forEach((k, v) -> {
                 final T castValue = v.getValue(type);
                 if (castValue != null) {
                     resultMap.put(k, castValue);

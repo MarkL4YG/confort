@@ -42,6 +42,7 @@ public interface IConfigNodeList {
 
     /**
      * Removes all nodes from the list.
+     *
      * @implNote Please be aware of the overloading with {@link IConfigNodeMap#clear()} as this will clear both types of nodes regardless of what the type is.
      */
     void clear();
@@ -56,6 +57,7 @@ public interface IConfigNodeList {
 
     /**
      * Returns a list just as {@link #asList()} but retrieves the values of the {@link IValueHolder}s contained in the usual list.
+     *
      * @throws de.mlessmann.confort.api.except.TypeMismatchException if any stored value is incompatible to the given type or the node is not a list.
      */
     <T> List<T> asValueList(Class<T> type);
@@ -63,6 +65,19 @@ public interface IConfigNodeList {
     /**
      * Weaker version of {@link #asValueList(Class)} where any incompatible value is simply skipped.
      * Also returns an empty list for virtual and completely incompatible nodes.
+     *
+     * <p>
+     * If the the flag ignoreCompatibility is set to true, any node will be treated as compatible.
+     * Therefore all null-values and invalid nodes are included as well - both yield a null value in the returned list.
+     * </p>
+     *
+     * @param ignoreCompatibility Whether all nodes should be treated as valid nodes.
+     */
+    <T> List<T> optValueList(Class<T> type, boolean ignoreCompatibility);
+
+    /**
+     * Default of {@link #optValueList(Class, boolean)} which does not ignore compatibility and therefore the returned
+     * list includes only the values of valid nodes.
      */
     <T> List<T> optValueList(Class<T> type);
 }

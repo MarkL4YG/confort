@@ -67,8 +67,8 @@ public interface IConfigNodeList {
      * Also returns an empty list for virtual and completely incompatible nodes.
      *
      * <p>
-     * If the the flag ignoreCompatibility is set to true, any node will be treated as compatible.
-     * Therefore all null-values and invalid nodes are included as well - both yield a null value in the returned list.
+     * If the the flag ignoreCompatibility is set to true, all null-values and incompatible nodes are included as
+     * {@code null} entries.
      * </p>
      *
      * @param ignoreCompatibility Whether all nodes should be treated as valid nodes.

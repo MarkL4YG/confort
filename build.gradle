@@ -27,7 +27,6 @@ targetCompatibility = JavaVersion.VERSION_1_8
 /// === Configuration === ///
 project.ext {
     artifact = 'confort'
-    antlrVersion = '4.7.1'
 }
 
 /// ===== Repositories / SourceSets / Dependencies ===== ///
@@ -64,14 +63,14 @@ sourceSets {
 }
 
 dependencies {
-    antlr group: 'org.antlr', name: 'antlr4', version: project.ext.antlrVersion
+    antlr group: 'org.antlr', name: 'antlr4', version: '4.8'
 
     compile sourceSets.api.output
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     
     langCompile sourceSets.api.output
     langCompile sourceSets.main.output
-    langCompile group: 'org.antlr', name: 'antlr4', version: project.ext.antlrVersion
+    langCompile group: 'org.antlr', name: 'antlr4', version: '4.8'
     langCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     
     testCompile sourceSets.lang.output

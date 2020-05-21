@@ -236,6 +236,21 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     }
 
     @Override
+    public synchronized IConfigNode remove(String... path) {
+        if (path == null) {
+            throw new IllegalArgumentException("Child path cannot be null for #remove");
+        }
+        if (path.length == 1) {
+            return this.remove(path[0]);
+        } else if (path.length > 1) {
+            String[] subPath = Arrays.copyOf(path, path.length - 1);
+            return this.getNode(subPath).remove(path[path.length - 1]);
+        } else {
+            throw new IllegalArgumentException("Invalid path length: " + path.length);
+        }
+    }
+
+    @Override
     public synchronized boolean collapse() {
         if (isList()) {
             removeIf(IConfigNode::collapse);

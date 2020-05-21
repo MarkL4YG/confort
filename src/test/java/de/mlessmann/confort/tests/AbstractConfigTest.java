@@ -1,6 +1,5 @@
 package de.mlessmann.confort.tests;
 
-import de.mlessmann.confort.LoaderFactory;
 import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.ParseException;
 import de.mlessmann.confort.api.lang.IConfigLoader;
@@ -10,9 +9,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public abstract class AbstractConfigTest {
+
+    static {
+        RegisterLoaders.registerLoaders();
+    }
+
     protected abstract String getTestResource();
 
     protected abstract IConfigLoader getLoader();
@@ -22,9 +26,7 @@ public abstract class AbstractConfigTest {
     }
 
     protected IConfigNode loadRoot() {
-        RegisterLoaders.registerLoaders();
-
-        try (InputStreamReader reader = new InputStreamReader(getFooStream(), Charset.forName("UTF-8"))) {
+        try (InputStreamReader reader = new InputStreamReader(getFooStream(), StandardCharsets.UTF_8)) {
             return getLoader().parse(reader, URI.create("resource://" + getTestResource()));
 
         } catch (IOException | ParseException e) {

@@ -19,10 +19,17 @@ public interface IConfigNodeMap {
     IConfigNode getNode(String... path);
 
     /**
-     * Remove the node that was stored behind the specified key.
+     * Remove the node that is stored behind the specified key.
      * @return the node that was remove or {@code null}.
      */
     IConfigNode remove(String childName);
+
+    /**
+     * Remove the node that is stored behind the specified path. This will <em>only remove the last node in the path.</em>
+     * Analogous behavior to {@code #getNode(pathWithoutChild).remove(lastChild)}.
+     * @return the node that was removed or {@code null}
+     */
+    IConfigNode remove(String... path);
 
     /**
      * Adds a new node to this mapping.

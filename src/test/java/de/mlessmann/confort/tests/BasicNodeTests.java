@@ -120,4 +120,22 @@ public class BasicNodeTests {
                 .map(Object::getClass)
                 .allMatch(String.class::equals));
     }
+
+    @Test
+    public void node_removeSingle() {
+        root.getNode("tee", "a").setString("a");
+        root.getNode("tee", "b").setString("b");
+        root.getNode("tee").remove("a");
+        assertTrue(root.getNode("tee", "a").isVirtual());
+        assertFalse(root.getNode("tee", "b").isVirtual());
+    }
+
+    @Test
+    public void node_removePath() {
+        root.getNode("tee", "a").setString("b");
+        root.getNode("tee", "b", "1").setString("b1");
+        root.getNode("tee", "b", "2").setString("b2");
+        assertNotNull(root.remove("tee", "b", "2"));
+        assertTrue(root.getNode("tee", "b", "2").isVirtual());
+    }
 }

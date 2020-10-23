@@ -78,7 +78,7 @@ dependencies {
     
     // Check-against libraries
     testCompile group: 'org.json', name: 'json', version: '20190722'
-    testCompile group: 'com.typesafe', name: 'config', version: '1.4.0'
+    testCompile group: 'com.typesafe', name: 'config', version: '1.4.1'
 }
 
 /// ===== Tasks ===== ///

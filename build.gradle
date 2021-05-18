@@ -63,7 +63,7 @@ sourceSets {
 }
 
 dependencies {
-    antlr group: 'org.antlr', name: 'antlr4', version: '4.8'
+    antlr group: 'org.antlr', name: 'antlr4', version: '4.9.2'
 
     compile sourceSets.api.output
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'

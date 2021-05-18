@@ -10,7 +10,6 @@ A configuration library based on nodes, trees and parsers generated from [ANTLR 
 | BuddyCI (bleeding) | [![buddy pipeline](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194465/badge.svg?token=22548d502f11240ea437ccc14a4348c352915b0cf82518920be9d2c98bdcb9dd "buddy pipeline")](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194465) |  
 | BuddyCI (pre-release)  | [![buddy pipeline](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194480/badge.svg?token=22548d502f11240ea437ccc14a4348c352915b0cf82518920be9d2c98bdcb9dd "buddy pipeline")](https://app.buddy.works/m-lessmann/confort/pipelines/pipeline/194480) |  
 | Snyk Security Check | [![Known Vulnerabilities](https://snyk.io/test/github/markl4yg/confort/badge.svg)](https://snyk.io/test/github/markl4yg/confort) |  
-| Dependabot-Updates  | [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=MarkL4YG/confort)](https://dependabot.com) |  
 | License-Scan        | [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMarkL4YG%2Fconfort.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMarkL4YG%2Fconfort?ref=badge_shield)|  
 
 

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -61,7 +62,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
         } else if (trackingMode == TrackingMode.PRIMITIVE) {
             return getValue() == null;
         } else {
-            logger.error("Unaccounted tracking mode! {}", trackingMode);
+            logger.error("Unaccounted tracking mode! {} at {}", trackingMode, getFullPath());
             return true;
         }
     }
@@ -91,12 +92,12 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public <T> List<T> asValueList(Class<T> type) {
         List<T> results = new LinkedList<>();
-        optList().orElseThrow(() -> new TypeMismatchException("Node is not a list!"))
+        optList().orElseThrow(() -> supplyNotA("list"))
                 .stream()
                 .map(node -> node.getValue(type))
                 .forEach(value -> {
                     if (value == null) {
-                        throw new TypeMismatchException("Incompatible type! Wanted: " + type.getName());
+                        throwIncompatibleType(type);
                     }
                     results.add(value);
                 });
@@ -179,11 +180,11 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public <T> Map<String, T> asValueMap(Class<T> type) {
         Map<String, T> resultMap = new LinkedHashMap<>();
-        optMap().orElseThrow(() -> new TypeMismatchException("Node is not a map!"))
+        optMap().orElseThrow(() -> supplyNotA("map"))
                 .forEach((k, v) -> {
                     final T castValue = v.getValue(type);
                     if (castValue == null) {
-                        throw new TypeMismatchException("Incompatible value encountered. Wanted: " + type.getName());
+                        throwIncompatibleType(type);
                     }
                     resultMap.put(k, castValue);
                 });
@@ -335,7 +336,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
             super.setValue(null);
 
         } else {
-            logger.error("Unaccounted tracking mode! {}", mode);
+            logger.error("Unaccounted tracking mode ({}) at {}", mode, getFullPath());
         }
 
         this.trackingMode = mode;
@@ -346,7 +347,7 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
 
     private synchronized void clearList() {
         list.stream()
-                .filter(node -> node instanceof ConfigNode)
+                .filter(ConfigNode.class::isInstance)
                 .map(ConfigNode.class::cast)
                 .forEach(ConfigNode::detachParent);
         list.clear();
@@ -376,5 +377,47 @@ public class ConfigNode extends ValueHolder implements IConfigNode {
     @Override
     public IConfigNode createNewInstance() {
         return new ConfigNode();
+    }
+
+    private TypeMismatchException supplyNotA(String type) {
+        final String msg = String.format("Node is not a %s at: %s", type, getFullPath());
+        final TypeMismatchException exception = new TypeMismatchException(msg);
+        logger.debug(msg, exception);
+        return exception;
+    }
+
+    private <T> void throwIncompatibleType(Class<T> type) {
+        final String msg = String.format("Incompatible value encountered. Wanted: %s at: %s", type.getName(), getFullPath());
+        final TypeMismatchException exception = new TypeMismatchException(msg);
+        logger.debug(msg, exception);
+        throw exception;
+    }
+
+    private synchronized String getChildKey(ConfigNode child) {
+        if (trackingMode == TrackingMode.MAP || trackingMode == TrackingMode.EXPLICIT_MAP) {
+            return map.entrySet().stream()
+                    .filter(entry -> entry.getValue() == child)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Given node is not my child!"))
+                    .getKey();
+        } else if (trackingMode == TrackingMode.LIST || trackingMode == TrackingMode.EXPLICIT_LIST) {
+            AtomicInteger idx = new AtomicInteger();
+            final Optional<IConfigNode> optChild = list.stream()
+                    .map(theChild -> {
+                        idx.incrementAndGet();
+                        return theChild == child ? theChild : null;
+                    })
+                    .filter(Objects::nonNull)
+                    .findFirst();
+            if (!optChild.isPresent()) {
+                throw new IllegalArgumentException("Given node is not my child!");
+            }
+            return String.format("[%d]", idx.get());
+        }
+        throw new IllegalStateException("I don't have any children!");
+    }
+
+    private String getFullPath() {
+        return parent != null ? parent.getFullPath() + "." + parent.getChildKey(this) : "$";
     }
 }

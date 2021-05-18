@@ -1,12 +1,10 @@
 package de.mlessmann.confort.tests;
 
+import de.mlessmann.confort.api.IConfigNode;
 import de.mlessmann.confort.api.except.TypeMismatchException;
 import de.mlessmann.confort.node.ConfigNode;
-import de.mlessmann.confort.api.IConfigNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -77,7 +75,7 @@ public class BasicNodeTests {
                 .allMatch(String.class::equals));
     }
 
-    @Test(expected = TypeMismatchException.class)
+    @Test
     public void node_asValueList_throws() {
         root.getNode("tee").appendValue("a");
         root.getNode("tee").appendValue("b");
@@ -85,10 +83,8 @@ public class BasicNodeTests {
         root.getNode("tee").appendValue("d");
         root.getNode("tee").appendValue("e");
         root.getNode("tee").appendValue("f");
-        assertTrue(root.getNode("tee").asValueList(Integer.class)
-                .stream()
-                .map(Object::getClass)
-                .allMatch(String.class::equals));
+        final IConfigNode teeNode = root.getNode("tee");
+        assertThrows(TypeMismatchException.class, () -> teeNode.asValueList(Integer.class));
     }
 
     @Test
@@ -106,7 +102,7 @@ public class BasicNodeTests {
                 .allMatch(String.class::equals));
     }
 
-    @Test(expected = TypeMismatchException.class)
+    @Test
     public void node_asValueMap_throws() {
         root.getNode("tee", "a").setString("a");
         root.getNode("tee", "b").setString("a");
@@ -114,11 +110,8 @@ public class BasicNodeTests {
         root.getNode("tee", "d").setString("a");
         root.getNode("tee", "e").setString("a");
         root.getNode("tee", "f").setString("a");
-        assertTrue(root.getNode("tee").asValueMap(Integer.class)
-                .values()
-                .stream()
-                .map(Object::getClass)
-                .allMatch(String.class::equals));
+        final IConfigNode teeNode = root.getNode("tee");
+        assertThrows(TypeMismatchException.class, () -> teeNode.asValueMap(Integer.class));
     }
 
     @Test

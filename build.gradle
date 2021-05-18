@@ -63,22 +63,22 @@ sourceSets {
 }
 
 dependencies {
-    antlr group: 'org.antlr', name: 'antlr4', version: '4.8'
+    antlr 'org.antlr:antlr4:4.8'
 
     compile sourceSets.api.output
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile 'org.slf4j:slf4j-api:1.7.30'
     
     langCompile sourceSets.api.output
     langCompile sourceSets.main.output
-    langCompile group: 'org.antlr', name: 'antlr4', version: '4.8'
-    langCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    langCompile 'org.antlr:antlr4:4.8'
+    langCompile 'org.slf4j:slf4j-api:1.7.30'
     
     testCompile sourceSets.lang.output
-    testCompile group: 'junit', name: 'junit', version: '4.13'
+    testCompile 'junit:junit:4.13'
     
     // Check-against libraries
-    testCompile group: 'org.json', name: 'json', version: '20190722'
-    testCompile group: 'com.typesafe', name: 'config', version: '1.4.0'
+    testCompile 'org.json:json:20190722'
+    testCompile 'com.typesafe:config:1.4.0'
 }
 
 /// ===== Tasks ===== ///
@@ -88,6 +88,6 @@ apply from: './artifacts.gradle'
 apply from: './publication.gradle'
 
 wrapper {
-    gradleVersion = '5.4.1'
+    gradleVersion '6.7.1'
     distributionType = Wrapper.DistributionType.ALL
 }

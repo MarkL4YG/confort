@@ -74,7 +74,7 @@ dependencies {
     langCompile 'org.slf4j:slf4j-api:1.7.30'
     
     testCompile sourceSets.lang.output
-    testCompile 'junit:junit:4.13'
+    testCompile 'junit:junit:4.13.2'
     
     // Check-against libraries
     testCompile 'org.json:json:20190722'

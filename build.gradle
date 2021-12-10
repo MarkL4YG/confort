@@ -79,7 +79,7 @@ dependencies {
     // Check-against libraries
     testCompile 'org.json:json:20190722'
     testCompile 'com.typesafe:config:1.4.0'
-    testRuntime 'org.apache.logging.log4j:log4j-api:2.14.0'
+    testRuntime 'org.apache.logging.log4j:log4j-api:2.15.0'
     testRuntime 'org.apache.logging.log4j:log4j-core:2.14.1'
     testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
 }

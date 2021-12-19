@@ -66,7 +66,7 @@ dependencies {
     antlr 'org.antlr:antlr4:4.9.2'
 
     compile sourceSets.api.output
-    compile 'org.slf4j:slf4j-api:1.7.30'
+    compile 'org.slf4j:slf4j-api:1.7.32'
     
     langCompile sourceSets.api.output
     langCompile sourceSets.main.output

@@ -66,12 +66,12 @@ dependencies {
     antlr 'org.antlr:antlr4:4.9.2'
 
     compile sourceSets.api.output
-    compile 'org.slf4j:slf4j-api:1.7.32'
+    compile 'org.slf4j:slf4j-api:1.7.33'
     
     langCompile sourceSets.api.output
     langCompile sourceSets.main.output
     langCompile 'org.antlr:antlr4:4.8'
-    langCompile 'org.slf4j:slf4j-api:1.7.30'
+    langCompile 'org.slf4j:slf4j-api:1.7.33'
     
     testCompile sourceSets.lang.output
     testCompile 'junit:junit:4.13.2'

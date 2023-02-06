@@ -32,10 +32,7 @@ project.ext {
 /// ===== Repositories / SourceSets / Dependencies ===== ///
 
 repositories {
-    maven {
-        name = 'FearNixx'
-        url uri('https://nexus.fearnixx.de/repository/maven-public')
-    }
+    mavenCentral()
 }
 
 sourceSets {
@@ -65,23 +62,23 @@ sourceSets {
 dependencies {
     antlr 'org.antlr:antlr4:4.9.2'
 
-    compile sourceSets.api.output
-    compile 'org.slf4j:slf4j-api:1.7.32'
-    
-    langCompile sourceSets.api.output
-    langCompile sourceSets.main.output
-    langCompile 'org.antlr:antlr4:4.8'
-    langCompile 'org.slf4j:slf4j-api:1.7.30'
-    
-    testCompile sourceSets.lang.output
-    testCompile 'junit:junit:4.13.2'
+    implementation sourceSets.api.output
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+
+    langImplementation sourceSets.api.output
+    langImplementation sourceSets.main.output
+    langImplementation 'org.antlr:antlr4:4.8'
+    langImplementation 'org.slf4j:slf4j-api:1.7.30'
+
+    testImplementation sourceSets.lang.output
+    testImplementation 'junit:junit:4.13.2'
     
     // Check-against libraries
-    testCompile 'org.json:json:20190722'
-    testCompile 'com.typesafe:config:1.4.0'
-    testRuntime 'org.apache.logging.log4j:log4j-api:2.17.0'
-    testRuntime 'org.apache.logging.log4j:log4j-core:2.17.0'
-    testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.0'
+    testImplementation 'org.json:json:20190722'
+    testImplementation 'com.typesafe:config:1.4.0'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-api:2.17.0'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.17.0'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.0'
 }
 
 /// ===== Tasks ===== ///

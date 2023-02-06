@@ -60,15 +60,15 @@ sourceSets {
 }
 
 dependencies {
-    antlr 'org.antlr:antlr4:4.9.2'
+    antlr 'org.antlr:antlr4:4.11.1'
 
     implementation sourceSets.api.output
-    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'org.slf4j:slf4j-api:2.0.6'
 
     langImplementation sourceSets.api.output
     langImplementation sourceSets.main.output
-    langImplementation 'org.antlr:antlr4:4.8'
-    langImplementation 'org.slf4j:slf4j-api:1.7.30'
+    langImplementation 'org.antlr:antlr4:4.11.1'
+    langImplementation 'org.slf4j:slf4j-api:2.0.6'
 
     testImplementation sourceSets.lang.output
     testImplementation 'junit:junit:4.13.2'

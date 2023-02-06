@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'de.mlessmann'
-version '1.1.2'
+version '1.1.3'
 
 if (project.hasProperty("preRelease")) {
     apply from: './pre-release.gradle'
